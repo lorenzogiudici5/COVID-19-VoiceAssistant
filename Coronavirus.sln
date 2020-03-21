@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoronavirusFunction", "CoronavirusFunction\CoronavirusFunction.csproj", "{C20C3775-8E9D-4B52-A1EE-200AC1D1264A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C20C3775-8E9D-4B52-A1EE-200AC1D1264A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C20C3775-8E9D-4B52-A1EE-200AC1D1264A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C20C3775-8E9D-4B52-A1EE-200AC1D1264A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C20C3775-8E9D-4B52-A1EE-200AC1D1264A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C81BFA5-DD04-4753-A3D1-9DB23A5A3044}
+	EndGlobalSection
+EndGlobal
