@@ -7,6 +7,9 @@ namespace CoronavirusFunction.Models
     {
         public abstract string Name { get; }
 
+        [JsonProperty("stato")]
+        public string Stato { get; set; }
+
         [JsonProperty("data")]
         public DateTimeOffset Data { get; set; }
 
