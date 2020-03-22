@@ -8,13 +8,6 @@ namespace CoronavirusFunction.Services
 {
     public interface IPcmDpcApi
     {
-        private const string URL_NAZIONE_LATEST = "/dpc-covid19-ita-andamento-nazionale-latest.json";
-        private const string URL_NAZIONE = "/dpc-covid19-ita-andamento-nazionale.json";
-        private const string URL_REGIONE_LATEST = "/dpc-covid19-ita-regioni-latest.json";
-        private const string URL_REGIONE = "/dpc-covid19-ita-regioni.json";
-        private const string URL_PROVINCIA_LATEST = "/dpc-covid19-ita-province-latest.json";
-        private const string URL_PROVINCIA = "/dpc-covid19-ita-regioni.json";
-
         [Get("/dpc-covid19-ita-andamento-nazionale.json")]
         Task<IEnumerable<DatiNazionali>> GetDatiNazionali();
         [Get("/dpc-covid19-ita-regioni.json")]
