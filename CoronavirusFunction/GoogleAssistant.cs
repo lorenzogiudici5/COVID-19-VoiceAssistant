@@ -26,67 +26,52 @@ namespace CoronavirusFunction
             {
                 log.LogInformation("C# HTTP trigger function processed a request.");
 
-                var response = new WebhookResponse();
-                WebhookRequest request;
+                var dialogflowResponse = new WebhookResponse();
+                WebhookRequest dialogflowRequest;
                 using (var reader = new StreamReader(req.Body))
                 {
-                    request = jsonParser.Parse<WebhookRequest>(reader);
+                    dialogflowRequest = jsonParser.Parse<WebhookRequest>(reader);
                 }
 
-                var intentDisplayName = request.QueryResult.Intent.DisplayName;
-                Intent intent;
-                if (!Enum.TryParse<Intent>(intentDisplayName, out intent))
+                var user = dialogflowRequest.OriginalDetectIntentRequest.Payload.Fields.ContainsKey("user") ? dialogflowRequest.OriginalDetectIntentRequest.Payload.Fields["user"] : null;
+                var userId = user != null ? user.StructValue.Fields["userId"].StringValue : default(string);
+
+
+                //var intentDisplayName = dialogflowRequest.QueryResult.Intent.DisplayName;
+                //Intent intent;
+                //if (!Enum.TryParse<Intent>(intentDisplayName, out intent))
+                //{
+                //    dialogflowResponse.FulfillmentText = "Non ho capito cosa mi hai chiesto";
+                //    return new OkObjectResult(dialogflowResponse);
+                //}
+
+                //// GET Paramaters
+                //var parameters = dialogflowRequest.QueryResult.Parameters;
+                //var locationParam = parameters.Fields.ContainsKey("location") && parameters.Fields["location"].ToString().Replace('\"', ' ').Trim().Length > 0 ?
+                //    parameters.Fields["location"].ToString() : //.Replace('\"', ' ').Trim(): 
+                //    string.Empty;
+
+                //var dateParam = parameters.Fields.ContainsKey("date") && parameters.Fields["date"].ToString().Replace('\"', ' ').Trim().Length > 0 ? 
+                //    parameters.Fields["date"].ToString().Replace('\"', ' ').Trim() : 
+                //    string.Empty;
+
+                //DateTime? date = null;
+                //Location location = !string.IsNullOrEmpty(locationParam) ? JsonConvert.DeserializeObject<Location>(locationParam) : new Location() { Country = "Italia" };
+
+                var request = new Request()
                 {
-                    response.FulfillmentText = "Non ho capito cosa mi hai chiesto";
-                    return new OkObjectResult(response);
-                }
+                    User = new Models.User(userId),
+                    Source = Source.Dialogflow,
+                    //Intent = intent,
+                    //Location = location,
+                    //Date = date,
+                };
+                dialogflowResponse = await request.Handle(dialogflowRequest);
 
-                // GET Paramaters
-                var parameters = request.QueryResult.Parameters;
-                var locationParam = parameters.Fields.ContainsKey("location") && parameters.Fields["location"].ToString().Replace('\"', ' ').Trim().Length > 0 ?
-                    parameters.Fields["location"].ToString() : //.Replace('\"', ' ').Trim(): 
-                    string.Empty;
-            
-                var dateParam = parameters.Fields.ContainsKey("date") && parameters.Fields["date"].ToString().Replace('\"', ' ').Trim().Length > 0 ? 
-                    parameters.Fields["date"].ToString().Replace('\"', ' ').Trim() : 
-                    string.Empty;
-
-                DateTime? date = null;
-                Location location = !string.IsNullOrEmpty(locationParam) ? JsonConvert.DeserializeObject<Location>(locationParam) : new Location() { Country = "Italia" };
-
-                var locationDefinition = getLocationDefinition(location);
-
-                Dati dati = null;
-
-                // TODO: date filter
-                   switch (locationDefinition)
-                {
-                    case LocationDefinition.Paese:
-                        dati = await Covid_Api.GetCountryData(location.Country, date);
-                        break;
-                    case LocationDefinition.Regione:
-                        dati = await Covid_Api.GetAdminAreaData(location.AdminArea, date);
-                        break;
-                    case LocationDefinition.Provincia:
-                        var provincia = location.SubadminArea.Split(' ')[2];
-                        dati = await Covid_Api.GetDistrictArea(provincia, date);
-                        break;
-                }
-                
-                switch (intent)
-                {
-                    case Intent.TotaleContagiati:
-                        response.FulfillmentText = dati != null && dati.TotaleCasi.HasValue ? dati.TotaleCasi.ToString() : "Dati non disponibili";
-                        break;
-                    case Intent.TotaleDeceduti:
-                        response.FulfillmentText = dati != null && dati.Deceduti.HasValue ? dati.Deceduti.ToString() : "Dati non disponibili";
-                        break;
-                    case Intent.AttualmentePositivi:
-                        response.FulfillmentText = dati != null && dati.TotaleAttualmentePositivi.HasValue ? dati.TotaleAttualmentePositivi.ToString() : "Dati non disponibili";
-                        break;
-                }
-
-                return new OkObjectResult(response);
+                // TODO: service
+                //Response response = await RequestManager.GetResponse(request);
+                //dialogflowResponse.FulfillmentText = response.Text;
+                return new OkObjectResult(dialogflowResponse);
             }
             catch (Exception ex)
             {
@@ -94,22 +79,16 @@ namespace CoronavirusFunction
                 return new BadRequestResult();
             }
         }
-
-        private static LocationDefinition getLocationDefinition(Location location)
-        {
-            return
-                !string.IsNullOrEmpty(location.Country) ? LocationDefinition.Paese :
-                !string.IsNullOrEmpty(location.AdminArea) ? LocationDefinition.Regione :
-                !string.IsNullOrEmpty(location.SubadminArea) ? LocationDefinition.Provincia :
-                LocationDefinition.Citta;
-        }
     }
 
     public enum Intent
     {
-        TotaleContagiati,
-        TotaleDeceduti,
-        AttualmentePositivi
+        Fallback,
+        Confirmed,
+        Deaths,
+        Positive,
+        Welcome,
+        Exit
     }
 
     public enum LocationDefinition

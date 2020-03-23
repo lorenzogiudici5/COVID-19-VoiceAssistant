@@ -30,5 +30,16 @@ namespace CoronavirusFunction.Models
 
         [JsonProperty("country")]
         public string Country { get; set; }
+
+        public LocationDefinition Definition => getLocationDefinition();
+
+        private LocationDefinition getLocationDefinition()
+        {
+            return
+                !string.IsNullOrEmpty(this.Country) ? LocationDefinition.Paese :
+                !string.IsNullOrEmpty(this.AdminArea) ? LocationDefinition.Regione :
+                !string.IsNullOrEmpty(this.SubadminArea) ? LocationDefinition.Provincia :
+                LocationDefinition.Citta;
+        }
     }
 }
