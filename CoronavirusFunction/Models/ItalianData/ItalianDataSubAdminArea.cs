@@ -3,15 +3,9 @@ using System;
 
 namespace CoronavirusFunction.Models
 {
-    public class DatiProvinciali : Dati
+    public class ItalianDataSubAdminArea : ItalianData
     {
         public override string Name => this.DenominazioneProvincia;
-
-        [JsonProperty("data")]
-        public DateTimeOffset Data { get; set; }
-
-        [JsonProperty("stato")]
-        public string Stato { get; set; }
 
         [JsonProperty("codice_regione")]
         public long CodiceRegione { get; set; }

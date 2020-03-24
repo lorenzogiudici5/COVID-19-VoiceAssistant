@@ -1,5 +1,4 @@
 ﻿using CoronavirusFunction.Models;
-using Newtonsoft.Json;
 using Refit;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,17 +8,17 @@ namespace CoronavirusFunction.Services
     public interface IPcmDpcApi
     {
         [Get("/dpc-covid19-ita-andamento-nazionale.json")]
-        Task<IEnumerable<DatiNazionali>> GetDatiNazionali();
+        Task<IEnumerable<ItalianDataCountry>> GetItalianDataCountry();
         [Get("/dpc-covid19-ita-regioni.json")]
-        Task<IEnumerable<DatiRegionali>> GetDatiRegionali();
+        Task<IEnumerable<ItalianDataAdminArea>> GetItalianDataAdminArea();
         [Get("/dpc-covid19-ita-province.json")]
-        Task<IEnumerable<DatiProvinciali>> GetDatiProvinciali();
+        Task<IEnumerable<ItalianDataSubAdminArea>> GetItalianDataSubAdminArea();
 
         [Get("/dpc-covid19-ita-andamento-nazionale-latest.json")]
-        Task<IEnumerable<DatiNazionali>> GetLastDatiNazionali();
+        Task<IEnumerable<ItalianDataCountry>> GetLastItalianDataCountry();
         [Get("/dpc-covid19-ita-regioni-latest.json")]
-        Task<IEnumerable<DatiRegionali>> GetLastDatiRegionali();
+        Task<IEnumerable<ItalianDataAdminArea>> GetLastItalianDataAdminArea();
         [Get("/dpc-covid19-ita-province-latest.json")]
-        Task<IEnumerable<DatiProvinciali>> GetLastDatiProvinciali();
+        Task<IEnumerable<ItalianDataSubAdminArea>> GetLastItalianDataSubAdminArea();
     }
 }

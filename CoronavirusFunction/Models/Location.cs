@@ -1,9 +1,13 @@
 ﻿using Newtonsoft.Json;
+using System.Globalization;
 
 namespace CoronavirusFunction.Models
 {
     public class Location
     {
+        private string description;
+        private string subadminArea;
+
         [JsonProperty("business-name")]
         public string BusinessName { get; set; }
 
@@ -23,7 +27,11 @@ namespace CoronavirusFunction.Models
         public string ZipCode { get; set; }
 
         [JsonProperty("subadmin-area")]
-        public string SubadminArea { get; set; }
+        public string SubadminArea
+        {
+            get => !string.IsNullOrEmpty(subadminArea) ? subadminArea : (!string.IsNullOrEmpty(this.BusinessName) && !string.IsNullOrEmpty(this.StreetAddress)) ? $"{this.BusinessName} di {this.StreetAddress}" : default(string); 
+            set => subadminArea = value; 
+        }
 
         [JsonProperty("street-address")]
         public string StreetAddress { get; set; }
@@ -33,13 +41,26 @@ namespace CoronavirusFunction.Models
 
         public LocationDefinition Definition => getLocationDefinition();
 
+        public string Description { get => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(description.ToLower()); set => description = value; }
+
         private LocationDefinition getLocationDefinition()
         {
-            return
-                !string.IsNullOrEmpty(this.Country) ? LocationDefinition.Paese :
-                !string.IsNullOrEmpty(this.AdminArea) ? LocationDefinition.Regione :
-                !string.IsNullOrEmpty(this.SubadminArea) ? LocationDefinition.Provincia :
-                LocationDefinition.Citta;
+            var definition =
+                !string.IsNullOrEmpty(this.Country) ? LocationDefinition.Country :
+                !string.IsNullOrEmpty(this.AdminArea) ? LocationDefinition.AdminArea :
+                !string.IsNullOrEmpty(this.SubadminArea) || (!string.IsNullOrEmpty(this.BusinessName) && !string.IsNullOrEmpty(this.StreetAddress)) ? LocationDefinition.SubAdminArea :
+                LocationDefinition.City;
+
+            Description = definition switch
+            {
+                LocationDefinition.Country => Country,
+                LocationDefinition.AdminArea => AdminArea,
+                LocationDefinition.SubAdminArea => SubadminArea,
+                LocationDefinition.City => City,
+                _ => string.Empty,
+            };
+
+            return definition;
         }
     }
 }

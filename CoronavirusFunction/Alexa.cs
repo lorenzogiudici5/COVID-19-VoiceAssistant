@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -10,11 +8,6 @@ using Newtonsoft.Json;
 using Alexa.NET.Response;
 using Alexa.NET.Request;
 using CoronavirusFunction.Models;
-using System.Collections.Generic;
-using CoronavirusFunction.Services;
-using Alexa.NET.Request.Type;
-using Alexa.NET;
-using System.Linq;
 
 namespace CoronavirusFunction
 {
@@ -22,8 +15,7 @@ namespace CoronavirusFunction
     {
         [FunctionName("Alexa")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -31,17 +23,17 @@ namespace CoronavirusFunction
             SkillRequest skillRequest = JsonConvert.DeserializeObject<SkillRequest>(json);
 
             var userId = skillRequest.Session.User?.UserId;
+            var sessionId = skillRequest.Session.SessionId;
 
-            var location = new Location() { Country = "Italia" };
-
-            var request = new Models.Request()
+            var conversation = new Conversation()
             {
                 User = new Models.User(userId),
+                ConversationId = sessionId,
                 Source = Source.Alexa,
             };
 
-            SkillResponse response = await request.Handle(skillRequest);
-            return new OkObjectResult(response);
+            SkillResponse alexaResponse = await conversation.Handle(skillRequest);
+            return new OkObjectResult(alexaResponse);
         }
     }
 }
