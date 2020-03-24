@@ -4,7 +4,6 @@ using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using CoronavirusFunction.Services;
 using Google.Cloud.Dialogflow.V2;
-using System;
 using System.Threading.Tasks;
 
 namespace CoronavirusFunction.Models

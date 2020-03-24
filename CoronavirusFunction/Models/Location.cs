@@ -46,9 +46,9 @@ namespace CoronavirusFunction.Models
         private LocationDefinition getLocationDefinition()
         {
             var definition =
-                !string.IsNullOrEmpty(this.Country) ? LocationDefinition.Country :
                 !string.IsNullOrEmpty(this.AdminArea) ? LocationDefinition.AdminArea :
                 !string.IsNullOrEmpty(this.SubadminArea) || (!string.IsNullOrEmpty(this.BusinessName) && !string.IsNullOrEmpty(this.StreetAddress)) ? LocationDefinition.SubAdminArea :
+                !string.IsNullOrEmpty(this.Country) ? LocationDefinition.Country :
                 LocationDefinition.City;
 
             Description = definition switch
