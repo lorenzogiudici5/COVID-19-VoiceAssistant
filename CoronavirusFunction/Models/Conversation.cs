@@ -64,7 +64,9 @@ namespace CoronavirusFunction.Models
             else if (request.Request is IntentRequest)
             {
                 var intentRequest = request.Request as IntentRequest;
-                intentName = intentRequest.Intent.Name;
+                intentName = intentRequest.Intent.Name.Contains("AMAZON") ? 
+                    intentRequest.Intent.Name.Split('.')[1].Replace("Intent", "") : 
+                    intentRequest.Intent.Name;
             }
             else
                 return ResponseBuilder.Tell("Non ho capito cosa mi hai chiesto");
