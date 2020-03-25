@@ -6,6 +6,6 @@ namespace CoronavirusFunction.Exceptions
     {
         private const string message = "Ho avuto qualche problema ad elaborare la risposta. Vuoi chiedermi altro?";
 
-        public HandlerException(string intentName, Exception innerException) : base(message, intentName) { }
+        public HandlerException(string intentName, Exception innerException) : base(message, intentName, innerException) { }
     }
 }
