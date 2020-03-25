@@ -14,6 +14,13 @@ namespace CoronavirusFunction.Models
     {
         private string intentName;
 
+        public Conversation (string id, User user, Source source)
+        {
+            this.Id = id;
+            this.User = user;
+            this.Source = source;
+        }
+
         public string Id { get; set; }
         public User User { get; set; }
         public Source Source { get; set; }

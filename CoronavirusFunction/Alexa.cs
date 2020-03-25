@@ -1,64 +1,75 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.ApplicationInsights.Extensibility;
 using Newtonsoft.Json;
+using Alexa.NET;
 using Alexa.NET.Response;
 using Alexa.NET.Request;
 using CoronavirusFunction.Models;
-using Microsoft.ApplicationInsights.Extensibility;
-using System;
 using CoronavirusFunction.Exceptions;
-using Alexa.NET;
 
 namespace CoronavirusFunction
 {
     public class Alexa : VirtualAssistant
     {
-        public Alexa (TelemetryConfiguration configuration) : base (configuration) { }
+        #region Private Fields
+        private SkillResponse skillResponse;
+        private SkillRequest skillRequest;
+        #endregion
 
+        #region Ctr
+        public Alexa (TelemetryConfiguration configuration) : base (configuration) { }
+        #endregion
+
+        #region Public Methods
         [FunctionName("Alexa")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, ILogger log)
         {
             try
             {
                 log.LogInformation("Alexa HTTP trigger");
 
-                string requestBody = await req.ReadAsStringAsync();
-                SkillRequest skillRequest = JsonConvert.DeserializeObject<SkillRequest>(requestBody);
+                RequestBody = await req.ReadAsStringAsync();
+                Conversation = InitConversation(RequestBody);                               // Build Conversation object
 
-                var sessionId = skillRequest.Session.SessionId;
-                var userId = skillRequest.Session.User?.UserId;
+                if (Conversation == null)
+                    return new BadRequestResult();
 
-                var conversation = new Conversation()
-                {
-                    User = new Models.User() { UserId = userId },
-                    Id = sessionId,
-                    Source = Source.Alexa,
-                };
-
-                trackRequest(conversation, requestBody);
-                SkillResponse alexaResponse = await conversation.Handle(skillRequest);
-
-                trackConversation(JsonConvert.SerializeObject(alexaResponse));
-
-                return new OkObjectResult(alexaResponse);
-            }
-            catch (Exception ex) when (ex is IntentException)
-            {
-                telemetryClient.TrackException(ex);
-                var reprompt = new Reprompt("Quali dati vuoi sapere?");
-                var exceptionResponse = ResponseBuilder.Ask(ex.Message, reprompt);
-                return new OkObjectResult(exceptionResponse);
+                skillResponse = await Conversation.Handle(skillRequest);                    // Handle Conversation and build response
             }
             catch (Exception ex)
             {
-                log.LogError(ex.Message);
-                return new BadRequestResult();
+                var reprompt = new Reprompt("Quali dati vuoi sapere?");
+                skillResponse =
+                    ex is IntentException ?
+                    ResponseBuilder.Ask(ex.Message, reprompt) :
+                    ResponseBuilder.Ask("C'è stato un imprevisto. Scusa.", reprompt);
             }
+            finally
+            {
+                trackConversation(Conversation, RequestBody, JsonConvert.SerializeObject(skillResponse));
+            }
+
+            return new OkObjectResult(skillResponse);
         }
+
+        public override Conversation InitConversation(string requestBody)
+        {
+            skillRequest = JsonConvert.DeserializeObject<SkillRequest>(requestBody);
+
+            if (skillRequest == null)
+                return null;
+
+            var sessionId = skillRequest.Session.SessionId;
+            var userId = skillRequest.Session.User?.UserId;
+            var user = new Models.User() { UserId = userId };
+            return new Conversation(sessionId, user, Source.Alexa);
+        }
+        #endregion
     }
 }
