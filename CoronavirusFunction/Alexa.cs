@@ -8,14 +8,20 @@ using Newtonsoft.Json;
 using Alexa.NET.Response;
 using Alexa.NET.Request;
 using CoronavirusFunction.Models;
+using Microsoft.ApplicationInsights.Extensibility;
 using System;
 
 namespace CoronavirusFunction
 {
-    public static class Alexa
+    public class Alexa : VirtualAssistant
     {
+        public Alexa (TelemetryConfiguration configuration) : base (configuration)
+        {
+
+        }
+
         [FunctionName("Alexa")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             try
@@ -37,6 +43,7 @@ namespace CoronavirusFunction
 
                 SkillResponse alexaResponse = await conversation.Handle(skillRequest);
 
+                trackConversation(conversation, requestBody, JsonConvert.SerializeObject(alexaResponse));
 
                 return new OkObjectResult(alexaResponse);
             }

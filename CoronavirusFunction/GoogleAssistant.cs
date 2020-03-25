@@ -9,16 +9,23 @@ using Microsoft.Extensions.Logging;
 using Google.Protobuf;
 using Google.Cloud.Dialogflow.V2;
 using CoronavirusFunction.Models;
+using Microsoft.ApplicationInsights.Extensibility;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace CoronavirusFunction
 {
-    public static class GoogleAssistant
+    public class GoogleAssistant : VirtualAssistant
     {
-        private static readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
+        private readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
+
+        public GoogleAssistant(TelemetryConfiguration configuration) : base(configuration)
+        {
+
+        }
 
         [FunctionName("GoogleAssistant")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             try
@@ -47,6 +54,8 @@ namespace CoronavirusFunction
                 };
 
                 dialogflowResponse = await conversation.Handle(dialogflowRequest);
+
+                trackConversation(conversation, requestBody, JsonConvert.SerializeObject(dialogflowResponse));
 
                 return new OkObjectResult(dialogflowResponse);
             }
