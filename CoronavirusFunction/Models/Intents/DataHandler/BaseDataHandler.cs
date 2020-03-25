@@ -111,7 +111,8 @@ namespace CoronavirusFunction.Models
 
         protected virtual string BuildSpeechResponse(Location location, string speechMsg)
         {
-            return !string.IsNullOrEmpty(speechMsg) ? $"In {location.Description} {speechMsg}" : "Dati non disponibili";
+            var preposition = location.Definition == LocationDefinition.City ? "A" : "In";
+            return !string.IsNullOrEmpty(speechMsg) ? $"{preposition} {location.Description} {speechMsg}" : "Dati non disponibili";
         }
     }
 }

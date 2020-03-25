@@ -33,10 +33,15 @@ namespace CoronavirusFunction.Models
             return BuildAlexaResponse(speechResponse, dataRequest.Location, data);
         }
 
-        protected string BuildSpeechResponse(ItalianData data, Location location) => 
-            data == null ? 
+        protected string BuildSpeechResponse(ItalianData data, Location location)
+        {
+            var preposition = location.Definition == LocationDefinition.City ? "A" : "In";
+            
+            return data == null ? 
             "Dati non disponibili" :
-            $"In {location.Description} {data.ToSpeechSummary(location.Definition)}";
+            $"{preposition} {location.Description} {data.ToSpeechSummary(location.Definition)}";
+        }
+
 
         protected WebhookResponse BuildWebhookResponse(string message, Location location, ItalianData data)
         {
