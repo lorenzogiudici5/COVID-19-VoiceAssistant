@@ -10,15 +10,14 @@ using Alexa.NET.Request;
 using CoronavirusFunction.Models;
 using Microsoft.ApplicationInsights.Extensibility;
 using System;
+using CoronavirusFunction.Exceptions;
+using Alexa.NET;
 
 namespace CoronavirusFunction
 {
     public class Alexa : VirtualAssistant
     {
-        public Alexa (TelemetryConfiguration configuration) : base (configuration)
-        {
-
-        }
+        public Alexa (TelemetryConfiguration configuration) : base (configuration) { }
 
         [FunctionName("Alexa")]
         public async Task<IActionResult> Run(
@@ -26,7 +25,7 @@ namespace CoronavirusFunction
         {
             try
             {
-                log.LogInformation("C# HTTP trigger function processed a request.");
+                log.LogInformation("Alexa HTTP trigger");
 
                 string requestBody = await req.ReadAsStringAsync();
                 SkillRequest skillRequest = JsonConvert.DeserializeObject<SkillRequest>(requestBody);
@@ -41,11 +40,19 @@ namespace CoronavirusFunction
                     Source = Source.Alexa,
                 };
 
+                trackRequest(conversation, requestBody);
                 SkillResponse alexaResponse = await conversation.Handle(skillRequest);
 
-                trackConversation(conversation, requestBody, JsonConvert.SerializeObject(alexaResponse));
+                trackConversation(JsonConvert.SerializeObject(alexaResponse));
 
                 return new OkObjectResult(alexaResponse);
+            }
+            catch (Exception ex) when (ex is IntentException)
+            {
+                telemetryClient.TrackException(ex);
+                var reprompt = new Reprompt("Quali dati vuoi sapere?");
+                var exceptionResponse = ResponseBuilder.Ask(ex.Message, reprompt);
+                return new OkObjectResult(exceptionResponse);
             }
             catch (Exception ex)
             {

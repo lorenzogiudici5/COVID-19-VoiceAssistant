@@ -13,6 +13,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Newtonsoft.Json;
 using System.Linq;
 using CoronavirusFunction.Helpers;
+using CoronavirusFunction.Exceptions;
 
 namespace CoronavirusFunction
 {
@@ -20,10 +21,7 @@ namespace CoronavirusFunction
     {
         private readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
 
-        public GoogleAssistant(TelemetryConfiguration configuration) : base(configuration)
-        {
-
-        }
+        public GoogleAssistant(TelemetryConfiguration configuration) : base(configuration) { }
 
         [FunctionName("GoogleAssistant")]
         public async Task<IActionResult> Run(
@@ -31,7 +29,7 @@ namespace CoronavirusFunction
         {
             try
             {
-                log.LogInformation("C# HTTP trigger function processed a request.");
+                log.LogInformation("Dialogflow HTTP Trigger");
 
                 var dialogflowResponse = new WebhookResponse();
                 WebhookRequest dialogflowRequest;
@@ -53,15 +51,26 @@ namespace CoronavirusFunction
                     Source = Source.Dialogflow
                 };
 
+                trackRequest(conversation, requestBody);
                 dialogflowResponse = await conversation.Handle(dialogflowRequest);
 
-                trackConversation(conversation, requestBody, JsonConvert.SerializeObject(dialogflowResponse));
+                trackConversation(JsonConvert.SerializeObject(dialogflowResponse));
 
                 return new OkObjectResult(dialogflowResponse);
             }
+            catch (Exception ex) when (ex is IntentException)
+            {
+                telemetryClient.TrackException(ex, telemetryProperties);
+
+                var exceptionResponse = new WebhookResponse()
+                {
+                    FulfillmentText = ex.Message
+                };
+                return new OkObjectResult(exceptionResponse);
+            }
             catch (Exception ex)
             {
-                log.LogError(ex.Message);
+                telemetryClient.TrackException(ex, telemetryProperties);
                 return new BadRequestResult();
             }
         }

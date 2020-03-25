@@ -2,6 +2,7 @@
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
+using CoronavirusFunction.Exceptions;
 using Google.Cloud.Dialogflow.V2;
 using System;
 using System.Linq;
@@ -11,97 +12,60 @@ namespace CoronavirusFunction.Models
 {
     public class Conversation
     {
-        private string intent;
+        private string intentName;
 
         public string Id { get; set; }
         public User User { get; set; }
         public Source Source { get; set; }
-        public string Intent { get => intent; set => intent = value; }
+        public string Intent { get => intentName; set => intentName = value; }
 
         public async Task<WebhookResponse> Handle(WebhookRequest request)
         {
-            intent = request.QueryResult.Intent.DisplayName;
-            var handler = findHandler(intent);
-            if (handler == null)
-            {
-                return new WebhookResponse
-                {
-                    FulfillmentText = "Non ho capito cosa mi hai chiesto"
-                };
-            }
+            intentName = request.QueryResult.Intent.DisplayName;
+            var handler = findHandler(intentName);
 
-            // Response must be mapped on WebhookResponse
             try
             {
-                //using (_tracer.StartSpan(intentName))
-                //{
-                // Call the sync handler, if there is one. If not, call the async handler.
-                // Otherwise, it's an error.
-                return handler.Handle(request) ??
+                return
+                    handler.Handle(request) ??
                     await handler.HandleAsync(request) ??
-                    new WebhookResponse
-                    {
-                        FulfillmentText = "Error. Handler did not return a valid response."
-                    };
-                //}
+                    throw new Exception("Errore nell'elaborare la richiesta");
             }
             catch (Exception ex)
             {
-                //_exceptionLogger.Log(e);
-                //var msg = (e as GoogleApiException)?.Error.Message ?? e.Message;
-                return new WebhookResponse
-                {
-                    FulfillmentText = $"Sorry, there's a problem"
-                };
+                throw new HandlerException(intentName, ex);
             }
         }
 
         public async Task<SkillResponse> Handle(SkillRequest request)
         {
             if (request.Request is LaunchRequest)
-                intent = "Welcome";
+                intentName = "Welcome";
             else if (request.Request is SessionEndedRequest)
-                intent = "Exit";
+                intentName = "Exit";
             else if (request.Request is IntentRequest)
             {
                 var intentRequest = request.Request as IntentRequest;
-                intent = intentRequest.Intent.Name.Contains("AMAZON") ?
+                intentName = intentRequest.Intent.Name.Contains("AMAZON") ?
                     intentRequest.Intent.Name.Split('.')[1].Replace("Intent", "") :
                     intentRequest.Intent.Name;
             }
-            else
-                return ResponseBuilder.Tell("Non ho capito cosa mi hai chiesto");
 
-            var handler = findHandler(intent);
-            if (handler == null)
-            {
-                return ResponseBuilder.Tell("Non ho capito cosa mi hai chiesto");
-            }
+            var handler = findHandler(intentName);
 
             try
             {
-                //using (_tracer.StartSpan(intentName))
-                //{
-                // Call the sync handler, if there is one. If not, call the async handler.
-                // Otherwise, it's an error.
-                return handler.Handle(request) ??
+                return 
+                    handler.Handle(request) ??
                     await handler.HandleAsync(request) ??
-                    ResponseBuilder.Tell("Errore");
-                //}
+                    throw new Exception("Errore nell'elaborare la richiesta");
             }
             catch (Exception ex)
             {
-                //_exceptionLogger.Log(e);
-                //var msg = (e as GoogleApiException)?.Error.Message ?? e.Message;
-                return ResponseBuilder.Tell("Errore");
+                throw new HandlerException(intentName, ex);
             }
         }
 
-        /// <summary>
-        /// Given an Intent name, finds a handler matching the intent name attribute.
-        /// </summary>
-        /// <param name="intentName">Intent name</param>
-        /// <returns>Handler or null, if no intent found</returns>
         private BaseHandler findHandler(string intentName)
         {
             var baseHandlerTypes = typeof(BaseHandler).Assembly.GetTypes()
@@ -115,11 +79,11 @@ namespace CoronavirusFunction.Models
             var type = typeList.FirstOrDefault();
             if (type == null) return null;
 
-            //var constructorInfo = type.GetConstructor(Type.EmptyTypes);
-            //var instance = (BaseHandler)constructorInfo.Invoke(null);
-
             var constructorInfo = type.GetConstructor(new[] { GetType() });
             var instance = (BaseHandler)constructorInfo.Invoke(new[] { this });
+
+            if(instance == null)
+                throw new IntentNotFoundException(intentName);
 
             return instance;
         }
