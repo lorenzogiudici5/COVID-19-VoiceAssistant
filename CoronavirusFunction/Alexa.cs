@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Alexa.NET.Response;
 using Alexa.NET.Request;
 using CoronavirusFunction.Models;
+using System;
 
 namespace CoronavirusFunction
 {
@@ -17,23 +18,33 @@ namespace CoronavirusFunction
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            string json = await req.ReadAsStringAsync();
-            SkillRequest skillRequest = JsonConvert.DeserializeObject<SkillRequest>(json);
-
-            var userId = skillRequest.Session.User?.UserId;
-            var sessionId = skillRequest.Session.SessionId;
-
-            var conversation = new Conversation()
+            try
             {
-                User = new Models.User(userId),
-                ConversationId = sessionId,
-                Source = Source.Alexa,
-            };
+                log.LogInformation("C# HTTP trigger function processed a request.");
 
-            SkillResponse alexaResponse = await conversation.Handle(skillRequest);
-            return new OkObjectResult(alexaResponse);
+                string requestBody = await req.ReadAsStringAsync();
+                SkillRequest skillRequest = JsonConvert.DeserializeObject<SkillRequest>(requestBody);
+
+                var userId = skillRequest.Session.User?.UserId;
+                var sessionId = skillRequest.Session.SessionId;
+
+                var conversation = new Conversation()
+                {
+                    User = new Models.User(userId),
+                    Id = sessionId,
+                    Source = Source.Alexa,
+                };
+
+                SkillResponse alexaResponse = await conversation.Handle(skillRequest);
+
+
+                return new OkObjectResult(alexaResponse);
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
+                return new BadRequestResult();
+            }
         }
     }
 }

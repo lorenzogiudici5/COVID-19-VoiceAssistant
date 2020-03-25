@@ -11,14 +11,17 @@ namespace CoronavirusFunction.Models
 {
     public class Conversation
     {
+        private string intent;
+
+        public string Id { get; set; }
         public User User { get; set; }
-        public string ConversationId { get; set; }
         public Source Source { get; set; }
+        public string Intent { get => intent; set => intent = value; }
 
         public async Task<WebhookResponse> Handle(WebhookRequest request)
         {
-            var intentName = request.QueryResult.Intent.DisplayName;
-            var handler = findHandler(intentName);
+            intent = request.QueryResult.Intent.DisplayName;
+            var handler = findHandler(intent);
             if (handler == null)
             {
                 return new WebhookResponse
@@ -32,14 +35,14 @@ namespace CoronavirusFunction.Models
             {
                 //using (_tracer.StartSpan(intentName))
                 //{
-                    // Call the sync handler, if there is one. If not, call the async handler.
-                    // Otherwise, it's an error.
-                    return handler.Handle(request) ??
-                        await handler.HandleAsync(request) ??
-                        new WebhookResponse
-                        {
-                            FulfillmentText = "Error. Handler did not return a valid response."
-                        };
+                // Call the sync handler, if there is one. If not, call the async handler.
+                // Otherwise, it's an error.
+                return handler.Handle(request) ??
+                    await handler.HandleAsync(request) ??
+                    new WebhookResponse
+                    {
+                        FulfillmentText = "Error. Handler did not return a valid response."
+                    };
                 //}
             }
             catch (Exception ex)
@@ -55,23 +58,21 @@ namespace CoronavirusFunction.Models
 
         public async Task<SkillResponse> Handle(SkillRequest request)
         {
-            string intentName;
-
             if (request.Request is LaunchRequest)
-                intentName = "Welcome";
+                intent = "Welcome";
             else if (request.Request is SessionEndedRequest)
-                intentName = "Exit";
+                intent = "Exit";
             else if (request.Request is IntentRequest)
             {
                 var intentRequest = request.Request as IntentRequest;
-                intentName = intentRequest.Intent.Name.Contains("AMAZON") ? 
-                    intentRequest.Intent.Name.Split('.')[1].Replace("Intent", "") : 
+                intent = intentRequest.Intent.Name.Contains("AMAZON") ?
+                    intentRequest.Intent.Name.Split('.')[1].Replace("Intent", "") :
                     intentRequest.Intent.Name;
             }
             else
                 return ResponseBuilder.Tell("Non ho capito cosa mi hai chiesto");
 
-            var handler = findHandler(intentName);
+            var handler = findHandler(intent);
             if (handler == null)
             {
                 return ResponseBuilder.Tell("Non ho capito cosa mi hai chiesto");
