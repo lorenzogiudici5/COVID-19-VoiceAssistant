@@ -11,7 +11,7 @@ namespace CoronavirusFunction.Models
     [Intent("Summary")]
     public class DataSummaryHandler : BaseDataHandler
     {
-        public DataSummaryHandler() : base() { }
+        public DataSummaryHandler(Conversation conversation) : base(conversation) { }
 
         public override async Task<WebhookResponse> HandleAsync(WebhookRequest request)
         {

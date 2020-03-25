@@ -12,7 +12,7 @@ namespace CoronavirusFunction.Models
     [Intent("Deaths")]
     public class DataDeathsHandler : BaseDataHandler
     {
-        public DataDeathsHandler() : base() { }
+        public DataDeathsHandler(Conversation conversation) : base(conversation) { }
 
         public override async Task<WebhookResponse> HandleAsync(WebhookRequest request)
         {

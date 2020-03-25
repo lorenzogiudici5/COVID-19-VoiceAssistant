@@ -115,8 +115,12 @@ namespace CoronavirusFunction.Models
             var type = typeList.FirstOrDefault();
             if (type == null) return null;
 
-            var constructorInfo = type.GetConstructor(Type.EmptyTypes);
-            var instance = (BaseHandler)constructorInfo.Invoke(null);
+            //var constructorInfo = type.GetConstructor(Type.EmptyTypes);
+            //var instance = (BaseHandler)constructorInfo.Invoke(null);
+
+            var constructorInfo = type.GetConstructor(new[] { GetType() });
+            var instance = (BaseHandler)constructorInfo.Invoke(new[] { this });
+
             return instance;
         }
     }

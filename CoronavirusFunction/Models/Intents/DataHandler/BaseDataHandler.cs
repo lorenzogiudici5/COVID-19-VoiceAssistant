@@ -13,6 +13,8 @@ namespace CoronavirusFunction.Models
 {
     public abstract class BaseDataHandler : BaseHandler
     {
+        public BaseDataHandler(Conversation conversation) : base(conversation) { }
+
         #region GoogleAssistant
         protected DataRequest InitRequestData(MapField<string, Value> fields)
         {
@@ -31,9 +33,11 @@ namespace CoronavirusFunction.Models
                 fields["location"].ToString() : 
                 string.Empty;
 
-            return !string.IsNullOrEmpty(locationParam) ? 
-                JsonConvert.DeserializeObject<Location>(locationParam) : 
-                new Location() { Country = "Italia" };
+            var locationDto = !string.IsNullOrEmpty(locationParam) ? 
+                JsonConvert.DeserializeObject<DialogflowLocationDto>(locationParam) : 
+                new DialogflowLocationDto() { Country = "Italia" };
+
+            return locationDto.ToLocation();
         }
         protected DateTimeOffset ExtractDate(MapField<string, Value> fields)
         {

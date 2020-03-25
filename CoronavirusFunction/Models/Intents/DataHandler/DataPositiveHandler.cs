@@ -11,7 +11,7 @@ namespace CoronavirusFunction.Models
     [Intent("Positive")]
     public class DataPositiveHandler : BaseDataHandler
     {
-        public DataPositiveHandler() : base() { }
+        public DataPositiveHandler(Conversation conversation) : base(conversation) { }
 
         public override async Task<WebhookResponse> HandleAsync(WebhookRequest request)
         {

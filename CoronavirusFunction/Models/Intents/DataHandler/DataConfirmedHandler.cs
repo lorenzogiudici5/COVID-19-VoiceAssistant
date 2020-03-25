@@ -12,7 +12,7 @@ namespace CoronavirusFunction.Models
     [Intent("Confirmed")]
     public class DataConfirmedHandler : BaseDataHandler
     {
-        public DataConfirmedHandler() : base() { }
+        public DataConfirmedHandler(Conversation conversation) : base(conversation) { }
 
         public override async Task<WebhookResponse> HandleAsync(WebhookRequest request)
         {

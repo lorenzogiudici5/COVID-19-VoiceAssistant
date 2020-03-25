@@ -10,8 +10,10 @@ namespace CoronavirusFunction.Models
     /// </summary>
     public abstract class BaseHandler
     {
-        public BaseHandler()
+        protected Conversation conversation;
+        public BaseHandler(Conversation conversation)
         {
+            this.conversation = conversation;
         }
 
         /// <summary>

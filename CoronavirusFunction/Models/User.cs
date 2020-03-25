@@ -1,13 +1,13 @@
-﻿namespace CoronavirusFunction.Models
+﻿using Newtonsoft.Json;
+using System;
+
+namespace CoronavirusFunction.Models
 {
     public class User
     {
-        private string _userId;
+        public string UserId { get; set; }
 
-        public User(string userId)
-        {
-            _userId = userId;
-        }
-        public string UserId { get => _userId; set => _userId = value; }
+        public DateTimeOffset? LastSeen { get; set; }
+        public bool IsReturningUser => LastSeen.HasValue;
     }
 }

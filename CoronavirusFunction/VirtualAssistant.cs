@@ -20,6 +20,7 @@ namespace CoronavirusFunction
             var properties = new Dictionary<string, string>();
             properties.Add("ConversationId", conversation.Id);
             properties.Add("User", conversation.User.UserId);
+            properties.Add("IsReturningUser", conversation.User.IsReturningUser.ToString());
             properties.Add("Source", conversation.Source.ToDescription());
             properties.Add("Intent", conversation.Intent);
             properties.Add("RequestBody", requestBody);

@@ -31,12 +31,12 @@ namespace CoronavirusFunction
                 string requestBody = await req.ReadAsStringAsync();
                 SkillRequest skillRequest = JsonConvert.DeserializeObject<SkillRequest>(requestBody);
 
-                var userId = skillRequest.Session.User?.UserId;
                 var sessionId = skillRequest.Session.SessionId;
+                var userId = skillRequest.Session.User?.UserId;
 
                 var conversation = new Conversation()
                 {
-                    User = new Models.User(userId),
+                    User = new Models.User() { UserId = userId },
                     Id = sessionId,
                     Source = Source.Alexa,
                 };

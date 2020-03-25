@@ -9,9 +9,7 @@ namespace CoronavirusFunction.Models
     public class ExitHandler : BaseHandler
     {
         private const string exitText = "Alla prossima e ricorda: IO RESTO A CASA";
-        public ExitHandler()
-        {
-        }
+        public ExitHandler(Conversation conversation) : base(conversation) { }
 
         public override WebhookResponse Handle(WebhookRequest request)
         {

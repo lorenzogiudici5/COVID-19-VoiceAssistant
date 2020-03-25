@@ -12,6 +12,7 @@ using CoronavirusFunction.Models;
 using Microsoft.ApplicationInsights.Extensibility;
 using Newtonsoft.Json;
 using System.Linq;
+using CoronavirusFunction.Helpers;
 
 namespace CoronavirusFunction
 {
@@ -41,14 +42,13 @@ namespace CoronavirusFunction
                     dialogflowRequest = jsonParser.Parse<WebhookRequest>(requestBody);
                 }
 
-                var user = dialogflowRequest.OriginalDetectIntentRequest.Payload.Fields.ContainsKey("user") ? dialogflowRequest.OriginalDetectIntentRequest.Payload.Fields["user"] : null;
-                var userId = user != null && user.StructValue.Fields.ContainsKey("userId") ? user.StructValue.Fields["userId"].StringValue : default(string);
-
-                var sessionId = dialogflowRequest.Session.Split('/').LastOrDefault();
+                var userJson = dialogflowRequest.OriginalDetectIntentRequest.Payload.Fields.ContainsKey("user") ? dialogflowRequest.OriginalDetectIntentRequest.Payload.Fields["user"].ToString() : default(string);
+                var userDto = !string.IsNullOrEmpty(userJson) ? JsonConvert.DeserializeObject<DialogflowUserDto>(userJson) : new DialogflowUserDto();
+                                var sessionId = dialogflowRequest.Session.Split('/').LastOrDefault();
                 
                 var conversation = new Conversation()
                 {
-                    User = new User(userId),
+                    User = userDto.ToUser(),
                     Id = sessionId,
                     Source = Source.Dialogflow
                 };
