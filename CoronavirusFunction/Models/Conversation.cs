@@ -36,7 +36,7 @@ namespace CoronavirusFunction.Models
                 return
                     handler.Handle(request) ??
                     await handler.HandleAsync(request) ??
-                    throw new Exception("Errore nell'elaborare la richiesta");
+                    throw new Exception("Nessun handler trovato.");
             }
             catch (Exception ex)
             {

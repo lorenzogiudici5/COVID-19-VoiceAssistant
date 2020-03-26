@@ -8,6 +8,14 @@ namespace CoronavirusFunction.Services
 {
     public static class DialogflowResponse
     {
+        public static WebhookResponse BuildRichResponse(params Intent.Types.Message[] messages)
+        {
+            var response = new WebhookResponse();
+            foreach(var message in messages)
+                response.FulfillmentMessages.Add(message);
+
+            return response;
+        }
         public static WebhookResponse BuildSimpleResponse(string fulfillmentText)
         {
             return new WebhookResponse()
@@ -22,14 +30,14 @@ namespace CoronavirusFunction.Services
                 TextToSpeech = textToSpeech,
                 DisplayText = displayText
             };
-            var simpleResponseMsg = buildSimpleResponseMsg(simpleResponse);
+            var simpleResponseMsg = BuildSimpleResponseMsg(simpleResponse);
 
             return new WebhookResponse()
             {
                 FulfillmentMessages = { simpleResponseMsg }
             };
         }
-        public static WebhookResponse BuildEndResponse(string exitText) => BuildSimpleResponse(exitText);
+        public static WebhookResponse BuildEndResponse(string textToSpeech, string displayText) => BuildSimpleResponse(textToSpeech, displayText);
 
         public static WebhookResponse BuildCardResponse(CardResponse card, string displayText = "Ecco i dati")
         {
@@ -43,7 +51,7 @@ namespace CoronavirusFunction.Services
             basicCard.Image = card.ImageUri != null ? new Image() { ImageUri = card.ImageUri.ToString(), AccessibilityText = card.ImageUri.Segments.LastOrDefault()} : null;
 
             var simpleResponse = new SimpleResponse() { TextToSpeech = card.TextToSpeech, DisplayText = displayText };
-            var simpleResponseMessage = buildSimpleResponseMsg(simpleResponse);
+            var simpleResponseMessage = BuildSimpleResponseMsg(simpleResponse);
 
             var cardMessage = new Intent.Types.Message() { Platform = Platform.ActionsOnGoogle };
             cardMessage.BasicCard = basicCard;
@@ -77,7 +85,7 @@ namespace CoronavirusFunction.Services
                 tableCard.Rows.Add(row);
 
             var simpleResponse = new SimpleResponse() { TextToSpeech = table.TextToSpeech, DisplayText = displayText };
-            var simpleResponseMessage = buildSimpleResponseMsg(simpleResponse);
+            var simpleResponseMessage = BuildSimpleResponseMsg(simpleResponse);
 
             var tableMessage = new Intent.Types.Message
             {
@@ -92,17 +100,17 @@ namespace CoronavirusFunction.Services
             };
         }
 
-        public static Intent.Types.Message BuildSuggestionChips(params string[] suggestions)
+        public static Intent.Types.Message BuildSuggestionChipsMsg(params string[] suggestions)
         {
             var message = new Intent.Types.Message() { Platform = Platform.ActionsOnGoogle };
             message.Suggestions = new Suggestions();
-            for (int i = 0; i< 9 || i<suggestions.Length; i++)                                      // MAX 8
+            for (int i = 0; i < suggestions.Length - 1 && i < 9; i++)                                      // MAX 8
                 message.Suggestions.Suggestions_.Add(new Suggestion() { Title = suggestions[i]});
 
             return message;
         }
 
-        private static Intent.Types.Message buildSimpleResponseMsg(params SimpleResponse[] simpleResponses)
+        public static Intent.Types.Message BuildSimpleResponseMsg(params SimpleResponse[] simpleResponses)
         {
             var message = new Intent.Types.Message() { Platform = Platform.ActionsOnGoogle };
             message.SimpleResponses = new SimpleResponses();
@@ -113,6 +121,16 @@ namespace CoronavirusFunction.Services
             }
 
             return message;
+        }
+
+        public static Intent.Types.Message BuildSimpleResponseMsg(string textToSpeech, string displayText = "")
+        {
+            var simpleResponse = new SimpleResponse()
+            {
+                TextToSpeech = textToSpeech,
+                DisplayText = displayText
+            };
+            return BuildSimpleResponseMsg(simpleResponse);
         }
     }
 }
