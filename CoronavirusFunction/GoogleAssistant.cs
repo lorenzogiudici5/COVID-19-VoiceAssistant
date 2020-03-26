@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -23,6 +22,7 @@ namespace CoronavirusFunction
         private readonly JsonParser jsonParser = new JsonParser(JsonParser.Settings.Default.WithIgnoreUnknownFields(true));
         private WebhookResponse dialogflowResponse;
         private WebhookRequest dialogflowRequest;
+        private string dialogflowStringResponse;
         #endregion
 
         #region Ctr
@@ -55,10 +55,11 @@ namespace CoronavirusFunction
             }
             finally
             {
-                trackConversation(Conversation, RequestBody, JsonConvert.SerializeObject(dialogflowResponse));
+                dialogflowStringResponse = dialogflowResponse.ToString();                   // We don’t want to use Json.NET — it doesn’t know how to handle Struct
+                trackConversation(Conversation, RequestBody, dialogflowStringResponse);     
             }
 
-            return new OkObjectResult(dialogflowResponse);
+            return new OkObjectResult(dialogflowStringResponse);       
         }
 
         public override Conversation InitConversation(string requestBody)

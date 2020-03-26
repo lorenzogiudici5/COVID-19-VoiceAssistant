@@ -1,10 +1,10 @@
-﻿using Alexa.NET;
+﻿using System.Threading.Tasks;
 using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
-using CoronavirusFunction.Services;
 using Google.Cloud.Dialogflow.V2;
-using System.Threading.Tasks;
+using CoronavirusFunction.Helpers;
+using CoronavirusFunction.Services;
 
 namespace CoronavirusFunction.Models
 {
@@ -18,8 +18,8 @@ namespace CoronavirusFunction.Models
             DataRequest dataRequest = InitRequestData(request.QueryResult.Parameters.Fields);
             ItalianData data = await Covid_Api.GetCoronavirusDati(dataRequest.Location, dataRequest.Date);
 
-            var speechResponse = BuildSpeechResponse(data, dataRequest.Location);
-            return BuildWebhookResponse(speechResponse, dataRequest.Location, data);
+            CardResponse cardResponse = InitCardResponse(dataRequest.Location, data?.ToSpeechSummary(dataRequest.Location.Definition), data?.ToTextSummary(dataRequest.Location.Definition));
+            return cardResponse.ToWebhookResponse();
         }
 
         public override async Task<SkillResponse> HandleAsync(SkillRequest request)
@@ -29,33 +29,8 @@ namespace CoronavirusFunction.Models
 
             ItalianData data = await Covid_Api.GetCoronavirusDati(dataRequest.Location, dataRequest.Date);
 
-            var speechResponse = BuildSpeechResponse(data, dataRequest.Location);
-            return BuildAlexaResponse(speechResponse, dataRequest.Location, data);
-        }
-
-        protected string BuildSpeechResponse(ItalianData data, Location location)
-        {
-            var preposition = location.Definition == LocationDefinition.City ? "A" : "In";
-            
-            return data == null ? 
-            "Dati non disponibili" :
-            $"{preposition} {location.Description} {data.ToSpeechSummary(location.Definition)}";
-        }
-
-
-        protected WebhookResponse BuildWebhookResponse(string message, Location location, ItalianData data)
-        {
-            return new WebhookResponse
-            {
-                FulfillmentText = message
-            };
-        }
-        protected SkillResponse BuildAlexaResponse(string message, Location location, ItalianData data)
-        {
-            var reprompt = new Reprompt("Vuoi sapere altri dati?");
-            return data == null ?
-                ResponseBuilder.Ask(message, reprompt) :
-                ResponseBuilder.AskWithCard(message, $"{location.Description}", data.ToTextSummary(location.Definition), reprompt);
+            CardResponse cardResponse = InitCardResponse(dataRequest.Location, data?.ToSpeechSummary(dataRequest.Location.Definition), data?.ToTextSummary(dataRequest.Location.Definition));
+            return cardResponse.ToSkillResponse();
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿using Alexa.NET;
-using Alexa.NET.Request;
+﻿using Alexa.NET.Request;
 using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
+using CoronavirusFunction.Helpers;
 using CoronavirusFunction.Services;
 using Google.Cloud.Dialogflow.V2;
-using System;
 using System.Threading.Tasks;
 
 namespace CoronavirusFunction.Models
@@ -19,7 +18,8 @@ namespace CoronavirusFunction.Models
             DataRequest dataRequest = InitRequestData(request.QueryResult.Parameters.Fields);
             ItalianData data = await Covid_Api.GetCoronavirusDati(dataRequest.Location, dataRequest.Date);
 
-            return BuildWebhookResponse(dataRequest.Location, data?.ToLongStringDeaths(), data?.ToShortStringDeaths());
+            CardResponse cardResponse = InitCardResponse(dataRequest.Location, data?.ToLongStringDeaths(), data?.ToShortStringDeaths());
+            return cardResponse.ToWebhookResponse();
         }
 
         public override async Task<SkillResponse> HandleAsync(SkillRequest request)
@@ -29,7 +29,8 @@ namespace CoronavirusFunction.Models
 
             ItalianData data = await Covid_Api.GetCoronavirusDati(dataRequest.Location, dataRequest.Date);
 
-            return BuildAlexaResponse(dataRequest.Location, data?.ToLongStringDeaths(), data?.ToShortStringDeaths());
+            CardResponse cardResponse = InitCardResponse(dataRequest.Location, data?.ToLongStringDeaths(), data?.ToShortStringDeaths());
+            return cardResponse.ToSkillResponse();
         }
     }
 }

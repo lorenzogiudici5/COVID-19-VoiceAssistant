@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace CoronavirusFunction.Models
 {
@@ -11,6 +10,7 @@ namespace CoronavirusFunction.Models
         public string City { get; set; }
         public string SubadminArea { get; set; }
         public string Country { get; set; }
+        public string ImageUri => getImageUri();
 
         public LocationDefinition Definition => getLocationDefinition();
 
@@ -34,6 +34,18 @@ namespace CoronavirusFunction.Models
             };
 
             return definition;
+        }
+
+        private string getImageUri()
+        {
+            // TODO: translate Country
+            //var countryImageUri = $"https://www.countries-ofthe-world.com/flags-normal/flag-of-{this.Country}.png";
+            var adminAreaImageUri = $"https://www.novalibandiere.it/wp-content/uploads/{this.AdminArea.ToLower()}.gif";
+
+            return 
+                //Definition == LocationDefinition.Country ? countryImageUri :
+                Definition == LocationDefinition.AdminArea ? adminAreaImageUri :
+                string.Empty;
         }
     }
 }

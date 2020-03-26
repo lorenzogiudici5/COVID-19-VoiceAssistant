@@ -1,6 +1,6 @@
-﻿using Alexa.NET;
-using Alexa.NET.Request;
+﻿using Alexa.NET.Request;
 using Alexa.NET.Response;
+using CoronavirusFunction.Services;
 using Google.Cloud.Dialogflow.V2;
 
 namespace CoronavirusFunction.Models
@@ -11,17 +11,8 @@ namespace CoronavirusFunction.Models
         private const string exitText = "Alla prossima e ricorda: IO RESTO A CASA";
         public ExitHandler(Conversation conversation) : base(conversation) { }
 
-        public override WebhookResponse Handle(WebhookRequest request)
-        {
-            return new WebhookResponse()
-            {
-                FulfillmentText = exitText
-            };
-        }
+        public override WebhookResponse Handle(WebhookRequest request) => DialogflowResponse.BuildEndResponse(exitText);
 
-        public override SkillResponse Handle(SkillRequest request)
-        {
-            return ResponseBuilder.Tell(exitText);
-        }
+        public override SkillResponse Handle(SkillRequest request) => AlexaResponse.BuildEndResponse(exitText);
     }
 }

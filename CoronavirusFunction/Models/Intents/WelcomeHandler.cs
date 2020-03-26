@@ -1,6 +1,7 @@
 ﻿using Alexa.NET;
 using Alexa.NET.Request;
 using Alexa.NET.Response;
+using CoronavirusFunction.Services;
 using Google.Cloud.Dialogflow.V2;
 
 namespace CoronavirusFunction.Models
@@ -15,16 +16,12 @@ namespace CoronavirusFunction.Models
 
         public override WebhookResponse Handle(WebhookRequest request)
         {
-            return new WebhookResponse()
-            {
-                FulfillmentText = !conversation.User.IsReturningUser? welcomeText : returningText
-            };
+            return DialogflowResponse.BuildSimpleResponse(!conversation.User.IsReturningUser ? welcomeText : returningText);
         }
 
         public override SkillResponse Handle(SkillRequest request)
         {
-            var reprompt = new Reprompt("Quali dati vuoi sapere?");
-            return ResponseBuilder.Ask(!conversation.User.IsReturningUser ? welcomeText : returningText, reprompt);
+            return AlexaResponse.BuildSimpleResponse(!conversation.User.IsReturningUser ? welcomeText : returningText);
         }
     }
 }
