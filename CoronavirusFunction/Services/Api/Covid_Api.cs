@@ -1,4 +1,5 @@
 ﻿using CoronavirusFunction.Helpers;
+using CoronavirusFunction.Helpers.Mappers;
 using CoronavirusFunction.Models;
 using Refit;
 using System;
@@ -12,73 +13,91 @@ namespace CoronavirusFunction.Services
     {
         private const string BASEURL_PCMDCP = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json";
         private const string BASEURL_LISPA = "https://services1.arcgis.com/XannvQVnsM1hoZyv/ArcGIS/rest/services/COMUNI_COVID19/FeatureServer/0";
+        private const string BASEURL_NOVEL = "https://corona.lmao.ninja";
 
-        public static async Task<ItalianData> GetCoronavirusDati(Location location, DateTimeOffset? date)
+        public static async Task<LocationData> GetCoronavirusDati(Location location, DateTimeOffset? date)
         {
             date = date.Value.Date == DateTime.Now.Date ? null : (DateTimeOffset?)date.Value.Date;
-            ItalianData dati = null;
+            LocationData dati = null;
 
             switch (location.Definition)
             {
                 case LocationDefinition.Country:
-                    dati = await Covid_Api.GetCountryData(location.Country, date);
+                    dati = await Covid_Api.GetCountryData(location.Name, date); 
                     break;
                 case LocationDefinition.AdminArea:
-                    dati = await Covid_Api.GetAdminAreaData(location.AdminArea, date);
+                    dati = await Covid_Api.GetAdminAreaData(location.Name, date);
                     break;
                 case LocationDefinition.SubAdminArea:
-                    var provincia = location.SubadminArea.Split(' ')[2];
+                    var provincia = location.Name.Split(' ')[2];
                     dati = await Covid_Api.GetSubAdminArea(provincia, date);
                     break;
                 case LocationDefinition.City:
-                    dati = await Covid_Api.GetCity(location.City);
+                    dati = await Covid_Api.GetCity(location.Name);
                     break;
             }
 
             return dati;
         }
 
-        public static async Task<ItalianData> GetCountryData(string country, DateTimeOffset? date = null)
+        public static async Task<LocationData> GetCountryData(string country, DateTimeOffset? date = null)
         {
-            var pcmDpcApi = RestService.For<IPcmDpcApi>(BASEURL_PCMDCP);
-            var dati = !date.HasValue ? await pcmDpcApi.GetLastItalianDataCountry() : await pcmDpcApi.GetItalianDataCountry();
-            return getFilteredDati(dati, country, date);
+            if(country.ToUpper() == "ITALIA")
+            {
+                var pcmDpcApi = RestService.For<IPcmDpcApi>(BASEURL_PCMDCP);
+                var dati = !date.HasValue ? await pcmDpcApi.GetLastItalianDataCountry() : await pcmDpcApi.GetItalianDataCountry();
+                
+                var pcmDpcCountry = getFilteredDati(dati, country, date) as PcmDpcCountryDto;
+                return pcmDpcCountry.ToCountryData();
+            }
+            else
+            {
+                var code = CountryHelper.Countries.Where(x => x.ItalianName == country).FirstOrDefault()?.Alpha2;
+
+                var novelApi = RestService.For<INovelCovidApi>(BASEURL_NOVEL);
+                var novelData = await novelApi.GeCountryData(code);
+                return novelData.ToCountryData(country);
+            }
         }
 
-        public static async Task<ItalianData> GetAdminAreaData(string area, DateTimeOffset? date = null)
+        public static async Task<LocationData> GetAdminAreaData(string area, DateTimeOffset? date = null)
         {
             var pcmDcpApi = RestService.For<IPcmDpcApi>(BASEURL_PCMDCP);
             var dati = !date.HasValue ? await pcmDcpApi.GetLastItalianDataAdminArea() : await pcmDcpApi.GetItalianDataAdminArea();
-            return getFilteredDati(dati, area, date);
+            var pcmDpcAdminArea = getFilteredDati(dati, area, date) as PcmDpcAdminAreaDto;
+
+            return pcmDpcAdminArea.ToAdminAreaData();
         }
 
-        public static async Task<ItalianData> GetSubAdminArea(string district, DateTimeOffset? date = null)
+        public static async Task<LocationData> GetSubAdminArea(string district, DateTimeOffset? date = null)
         {
             var pcmDcpApi = RestService.For<IPcmDpcApi>(BASEURL_PCMDCP);
             var dati = !date.HasValue ? await pcmDcpApi.GetLastItalianDataSubAdminArea() : await pcmDcpApi.GetItalianDataSubAdminArea();
-            return getFilteredDati(dati, district, date);
+            var pcmDpcSubAdminAdminArea = getFilteredDati(dati, district, date) as PcmDpcSubAdminAreaDto;
+
+            return pcmDpcSubAdminAdminArea.ToSubAdminAreaData();
         }
 
-        public static async Task<ItalianData> GetCity(string city, DateTimeOffset? date = null)
+        public static async Task<LocationData> GetCity(string city, DateTimeOffset? date = null)
         {
             if (date.HasValue)
                 return null;
 
             var lispaApi = RestService.For<ILispaApi>(BASEURL_LISPA);
             var lispaData = await lispaApi.GetLispaData();
-            var dati = new List<ItalianData>();
+            var dati = new List<LocationData>();
 
             foreach (var data in lispaData.Features)
-                dati.Add(data.Attributes.ToItalianData());
+                dati.Add(data.Attributes.ToLocationData());
 
-            return getFilteredDati(dati, city, null);
+            return dati.FirstOrDefault(x => x.Description.ToUpper() == city.ToUpper());
         }
 
-        private static ItalianData getFilteredDati(IEnumerable<ItalianData> dati, string name, DateTimeOffset? date)
+        private static PcmDpcDto getFilteredDati(IEnumerable<PcmDpcDto> dati, string name, DateTimeOffset? date)
         {
             return !date.HasValue ?
-                dati.FirstOrDefault(x => x.Name.ToUpper() == name.ToUpper()) :
-                dati.FirstOrDefault(x => x.Name.ToUpper() == name.ToUpper() && x.Data.Date == date.Value);
+                dati.FirstOrDefault(x => x.Description.ToUpper() == name.ToUpper()) :
+                dati.FirstOrDefault(x => x.Description.ToUpper() == name.ToUpper() && x.Date.Date == date.Value);
         }
     }
 }

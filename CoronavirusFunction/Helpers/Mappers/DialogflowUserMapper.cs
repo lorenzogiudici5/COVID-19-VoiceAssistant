@@ -10,6 +10,7 @@ namespace CoronavirusFunction.Helpers
             {
                 UserId = userDto.UserId,
                 LastSeen = userDto.LastSeen,
+                Language = userDto.Locale
             };
         }
     }

@@ -1,47 +1,33 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
 
 namespace CoronavirusFunction.Models
 {
-    public abstract class ItalianData
+    public abstract class LocationData
     {
-        public abstract string Name { get; }
+        public LocationData (string name)
+        {
+            this.Name = name;
+        }
 
-        [JsonProperty("stato")]
-        public string Stato { get; set; }
+        // SET CULTURE
+        public string Name { get; private set; }
+        public virtual string Description => this.Name;
+        public virtual Uri FlagUri { get; set; }
+        public double Lat { get; set; }
+        public double Long { get; set; }
+        public string Country { get; set; }
+        public DateTimeOffset Date { get; set; }
 
-        [JsonProperty("data")]
-        public DateTimeOffset Data { get; set; }
-
-        [JsonProperty("ricoverati_con_sintomi")]
         public long? RicoveratiConSintomi { get; set; }
-
-        [JsonProperty("terapia_intensiva")]
         public long? TerapiaIntensiva { get; set; }
-
-        [JsonProperty("totale_ospedalizzati")]
         public long? TotaleOspedalizzati { get; set; }
-
-        [JsonProperty("isolamento_domiciliare")]
         public long? IsolamentoDomiciliare { get; set; }
-
-        [JsonProperty("totale_attualmente_positivi")]
         public long? TotaleAttualmentePositivi { get; set; }
-
-        [JsonProperty("nuovi_attualmente_positivi")]
         public long? NuoviAttualmentePositivi { get; set; }
-
-        [JsonProperty("dimessi_guariti")]
         public long? DimessiGuariti { get; set; }
-
-        [JsonProperty("deceduti")]
         public long? Deceduti { get; set; }
-
-        [JsonProperty("totale_casi")]
         public long? TotaleCasi { get; set; }
-
-        [JsonProperty("tamponi")]
         public long? Tamponi { get; set; }
 
         public string ToLongStringConfirmed() => this.TotaleCasi != null ? $"Il totale dei casi confermati è {TotaleCasi}" : default(string);

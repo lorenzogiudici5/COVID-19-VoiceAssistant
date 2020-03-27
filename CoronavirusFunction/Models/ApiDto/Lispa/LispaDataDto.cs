@@ -102,7 +102,7 @@ namespace CoronavirusFunction.Models
         public bool IsSystemMaintained { get; set; }
     }
 
-    public enum NomePro { Bergamo, Brescia, Como, Cremona, Ignota, Lecco, Lodi, Mantova, Milano, MonzaEDellaBrianza, Pavia, Sondrio, Varese };
+    public enum ProvinceLombardia { Bergamo, Brescia, Como, Cremona, Ignota, Lecco, Lodi, Mantova, Milano, MonzaEDellaBrianza, Pavia, Sondrio, Varese };
 
     internal static class Converter
     {
@@ -120,7 +120,7 @@ namespace CoronavirusFunction.Models
 
     internal class NomeProConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(NomePro) || t == typeof(NomePro?);
+        public override bool CanConvert(Type t) => t == typeof(ProvinceLombardia) || t == typeof(ProvinceLombardia?);
 
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
@@ -129,31 +129,31 @@ namespace CoronavirusFunction.Models
             switch (value)
             {
                 case "BERGAMO":
-                    return NomePro.Bergamo;
+                    return ProvinceLombardia.Bergamo;
                 case "BRESCIA":
-                    return NomePro.Brescia;
+                    return ProvinceLombardia.Brescia;
                 case "COMO":
-                    return NomePro.Como;
+                    return ProvinceLombardia.Como;
                 case "CREMONA":
-                    return NomePro.Cremona;
+                    return ProvinceLombardia.Cremona;
                 case "IGNOTA":
-                    return NomePro.Ignota;
+                    return ProvinceLombardia.Ignota;
                 case "LECCO":
-                    return NomePro.Lecco;
+                    return ProvinceLombardia.Lecco;
                 case "LODI":
-                    return NomePro.Lodi;
+                    return ProvinceLombardia.Lodi;
                 case "MANTOVA":
-                    return NomePro.Mantova;
+                    return ProvinceLombardia.Mantova;
                 case "MILANO":
-                    return NomePro.Milano;
+                    return ProvinceLombardia.Milano;
                 case "MONZA E DELLA BRIANZA":
-                    return NomePro.MonzaEDellaBrianza;
+                    return ProvinceLombardia.MonzaEDellaBrianza;
                 case "PAVIA":
-                    return NomePro.Pavia;
+                    return ProvinceLombardia.Pavia;
                 case "SONDRIO":
-                    return NomePro.Sondrio;
+                    return ProvinceLombardia.Sondrio;
                 case "VARESE":
-                    return NomePro.Varese;
+                    return ProvinceLombardia.Varese;
             }
             throw new Exception("Cannot unmarshal type NomePro");
         }
@@ -165,46 +165,46 @@ namespace CoronavirusFunction.Models
                 serializer.Serialize(writer, null);
                 return;
             }
-            var value = (NomePro)untypedValue;
+            var value = (ProvinceLombardia)untypedValue;
             switch (value)
             {
-                case NomePro.Bergamo:
+                case ProvinceLombardia.Bergamo:
                     serializer.Serialize(writer, "BERGAMO");
                     return;
-                case NomePro.Brescia:
+                case ProvinceLombardia.Brescia:
                     serializer.Serialize(writer, "BRESCIA");
                     return;
-                case NomePro.Como:
+                case ProvinceLombardia.Como:
                     serializer.Serialize(writer, "COMO");
                     return;
-                case NomePro.Cremona:
+                case ProvinceLombardia.Cremona:
                     serializer.Serialize(writer, "CREMONA");
                     return;
-                case NomePro.Ignota:
+                case ProvinceLombardia.Ignota:
                     serializer.Serialize(writer, "IGNOTA");
                     return;
-                case NomePro.Lecco:
+                case ProvinceLombardia.Lecco:
                     serializer.Serialize(writer, "LECCO");
                     return;
-                case NomePro.Lodi:
+                case ProvinceLombardia.Lodi:
                     serializer.Serialize(writer, "LODI");
                     return;
-                case NomePro.Mantova:
+                case ProvinceLombardia.Mantova:
                     serializer.Serialize(writer, "MANTOVA");
                     return;
-                case NomePro.Milano:
+                case ProvinceLombardia.Milano:
                     serializer.Serialize(writer, "MILANO");
                     return;
-                case NomePro.MonzaEDellaBrianza:
+                case ProvinceLombardia.MonzaEDellaBrianza:
                     serializer.Serialize(writer, "MONZA E DELLA BRIANZA");
                     return;
-                case NomePro.Pavia:
+                case ProvinceLombardia.Pavia:
                     serializer.Serialize(writer, "PAVIA");
                     return;
-                case NomePro.Sondrio:
+                case ProvinceLombardia.Sondrio:
                     serializer.Serialize(writer, "SONDRIO");
                     return;
-                case NomePro.Varese:
+                case ProvinceLombardia.Varese:
                     serializer.Serialize(writer, "VARESE");
                     return;
             }

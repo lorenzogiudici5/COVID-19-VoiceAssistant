@@ -84,7 +84,8 @@ namespace CoronavirusFunction.Models
                            select baseHandlerType;
 
             var type = typeList.FirstOrDefault();
-            if (type == null) return null;
+            if (type == null)
+                throw new IntentNotFoundException(intentName);
 
             var constructorInfo = type.GetConstructor(new[] { GetType() });
             var instance = (BaseHandler)constructorInfo.Invoke(new[] { this });

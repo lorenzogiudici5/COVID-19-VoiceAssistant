@@ -13,6 +13,8 @@ using Google.Cloud.Dialogflow.V2;
 using CoronavirusFunction.Models;
 using CoronavirusFunction.Helpers;
 using CoronavirusFunction.Exceptions;
+using System.Globalization;
+using System.IO;
 
 namespace CoronavirusFunction
 {
@@ -31,7 +33,7 @@ namespace CoronavirusFunction
 
         #region Public Methods
         [FunctionName("GoogleAssistant")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, ILogger log, ExecutionContext context)
         {
             try
             {
@@ -39,6 +41,11 @@ namespace CoronavirusFunction
 
                 RequestBody = await req.ReadAsStringAsync();
                 Conversation = InitConversation(RequestBody);                               // Build Conversation object
+
+                var path = Path.Combine(Directory.GetParent(context.FunctionDirectory).FullName, "Content", "countries.json");
+
+                var text = File.ReadAllText(path);
+                CountryHelper.Countries = JsonConvert.DeserializeObject<CountryDto[]>(text);
 
                 if (Conversation == null)
                     return new BadRequestResult();

@@ -13,6 +13,9 @@
     <PackageReference Include="Refit" Version="5.1.27" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\countries.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -4,11 +4,10 @@ namespace CoronavirusFunction.Helpers
 {
     public static class LispaDataCityMapper
     {
-        public static ItalianData ToItalianData(this LispaDataCity lispaData)
+        public static LocationData ToLocationData(this LispaDataCity lispaData)
         {
-            return new ItalianDataCity()
+            return new CityData(lispaData.NomeCom)
             {
-                Comune = lispaData.NomeCom,
                 CodIstatn = lispaData.CodIstatn,
                 Fid = lispaData.Fid,
                 TotaleCasi = lispaData.Totale,

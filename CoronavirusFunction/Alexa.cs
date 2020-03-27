@@ -66,8 +66,9 @@ namespace CoronavirusFunction
                 return null;
 
             var sessionId = skillRequest.Session.SessionId;
+            var language = skillRequest.Request.Locale;
             var userId = skillRequest.Session.User?.UserId;
-            var user = new Models.User() { UserId = userId };
+            var user = new Models.User() { UserId = userId, Language = language };
             return new Conversation(sessionId, user, Source.Alexa);
         }
         #endregion
