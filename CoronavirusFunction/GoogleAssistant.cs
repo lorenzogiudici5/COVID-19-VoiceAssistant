@@ -45,13 +45,6 @@ namespace CoronavirusFunction
                 if (Conversation == null)
                     return new BadRequestResult();
 
-
-                var culture = CultureInfo.GetCultureInfo(Conversation.Language);
-                Resources.Resource.Culture = culture;
-                var x = Resources.Resource.Prova;
-
-                telemetryClient.TrackEvent($"LANGUAGE TEST: {Resources.Resource.Culture} - {x}");
-
                 dialogflowResponse = await Conversation.Handle(dialogflowRequest);          // Handle Conversation and build response
             }
             catch (Exception ex)
