@@ -2,10 +2,9 @@
 
 namespace CoronavirusFunction.Models
 {
-    public partial class ItalianDataAdminArea : ItalianData
+    public partial class PcmDpcAdminAreaDto : PcmDpcDto
     {
-        public override string Name => this.DenominazioneRegione;
-
+        public override string Description => this.DenominazioneRegione;
 
         [JsonProperty("codice_regione")]
         public long CodiceRegione { get; set; }

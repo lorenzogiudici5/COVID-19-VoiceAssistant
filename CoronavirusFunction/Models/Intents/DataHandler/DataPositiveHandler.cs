@@ -16,9 +16,9 @@ namespace CoronavirusFunction.Models
         public override async Task<WebhookResponse> HandleAsync(WebhookRequest request)
         {
             DataRequest dataRequest = InitRequestData(request.QueryResult.Parameters.Fields);
-            ItalianData data = await Covid_Api.GetCoronavirusDati(dataRequest.Location, dataRequest.Date);
+            LocationData data = await Covid_Api.GetCoronavirusDati(dataRequest.Location, dataRequest.Date);
 
-            CardResponse cardResponse = InitCardResponse(dataRequest.Location, data?.ToLongStringPositive(), data?.ToShortStringPositive());
+            CardResponse cardResponse = InitCardResponse(data, data?.ToLongStringPositive(), data?.ToShortStringPositive());
             return cardResponse.ToWebhookResponse();
         }
 
@@ -27,9 +27,9 @@ namespace CoronavirusFunction.Models
             var intentRequest = request.Request as IntentRequest;
             DataRequest dataRequest = InitRequestData(intentRequest.Intent.Slots);
 
-            ItalianData data = await Covid_Api.GetCoronavirusDati(dataRequest.Location, dataRequest.Date);
+            LocationData data = await Covid_Api.GetCoronavirusDati(dataRequest.Location, dataRequest.Date);
 
-            CardResponse cardResponse = InitCardResponse(dataRequest.Location, data?.ToLongStringPositive(), data?.ToShortStringPositive());
+            CardResponse cardResponse = InitCardResponse(data, data?.ToLongStringPositive(), data?.ToShortStringPositive());
             return cardResponse.ToSkillResponse();
         }
     }

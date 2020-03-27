@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace CoronavirusFunction.Models
 {
-    public class ItalianDataSubAdminArea : ItalianData
+    public class PcmDpcSubAdminAreaDto : PcmDpcDto
     {
-        public override string Name => this.DenominazioneProvincia;
+        public override string Description => this.DenominazioneProvincia;
 
         [JsonProperty("codice_regione")]
         public long CodiceRegione { get; set; }

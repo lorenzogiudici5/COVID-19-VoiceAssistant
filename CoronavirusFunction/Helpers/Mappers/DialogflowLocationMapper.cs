@@ -13,13 +13,22 @@ namespace CoronavirusFunction.Helpers
                 $"{locationDto.BusinessName} di {locationDto.City}" :
                 default(string);
 
-            return new Location()
+            var definition =
+                !string.IsNullOrEmpty(locationDto.AdminArea) ? LocationDefinition.AdminArea :
+                !string.IsNullOrEmpty(subAdminArea) ? LocationDefinition.SubAdminArea :
+                !string.IsNullOrEmpty(locationDto.Country) ? LocationDefinition.Country :
+                LocationDefinition.City;
+
+            var name = definition switch
             {
-                Country = locationDto.Country,
-                AdminArea = locationDto.AdminArea,
-                SubadminArea = subAdminArea,
-                City = locationDto.City
+                LocationDefinition.Country => locationDto.Country,
+                LocationDefinition.AdminArea => locationDto.AdminArea,
+                LocationDefinition.SubAdminArea => locationDto.SubadminArea,
+                LocationDefinition.City => locationDto.City,
+                _ => string.Empty,
             };
+
+            return new Location(name, definition);
         }
     }
 }

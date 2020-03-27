@@ -4,48 +4,27 @@ namespace CoronavirusFunction.Models
 {
     public class Location
     {
-        private string description;
-
-        public string AdminArea { get; set; }
-        public string City { get; set; }
-        public string SubadminArea { get; set; }
-        public string Country { get; set; }
-        public string ImageUri => getImageUri();
-
-        public LocationDefinition Definition => getLocationDefinition();
-
-        public string Description { get => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(description.ToLower()); set => description = value; }
-
-        private LocationDefinition getLocationDefinition()
+        public Location (string name, LocationDefinition definition)
         {
-            var definition =
-                !string.IsNullOrEmpty(this.AdminArea) ? LocationDefinition.AdminArea :
-                !string.IsNullOrEmpty(this.SubadminArea) ? LocationDefinition.SubAdminArea :
-                !string.IsNullOrEmpty(this.Country) ? LocationDefinition.Country :
-                LocationDefinition.City;
-
-            Description = definition switch
-            {
-                LocationDefinition.Country => Country,
-                LocationDefinition.AdminArea => AdminArea,
-                LocationDefinition.SubAdminArea => SubadminArea,
-                LocationDefinition.City => City,
-                _ => string.Empty,
-            };
-
-            return definition;
+            this.Name = name;
+            this.Definition = definition;
         }
+        public string Name { get; set; }
+        //public string AdminArea { get; set; }
+        //public string City { get; set; }
+        //public string SubadminArea { get; set; }
+        //public string Country { get; set; }
 
-        private string getImageUri()
-        {
-            // TODO: translate Country
-            //var countryImageUri = $"https://www.countries-ofthe-world.com/flags-normal/flag-of-{this.Country}.png";
-            var adminAreaImageUri = $"https://www.novalibandiere.it/wp-content/uploads/{this.AdminArea.ToLower()}.gif";
+        public LocationDefinition Definition { get; private set; }
+        //public LocationDefinition Definition => getLocationDefinition();
 
-            return 
-                //Definition == LocationDefinition.Country ? countryImageUri :
-                Definition == LocationDefinition.AdminArea ? adminAreaImageUri :
-                string.Empty;
-        }
+        //private LocationDefinition getLocationDefinition()
+        //{
+        //    return
+        //        this.AdminArea != null ? LocationDefinition.AdminArea :
+        //        this.SubadminArea != null ? LocationDefinition.SubAdminArea :
+        //        this.Country != null ? LocationDefinition.Country :
+        //        LocationDefinition.City;
+        //}
     }
 }

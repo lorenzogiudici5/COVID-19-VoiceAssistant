@@ -8,17 +8,17 @@ namespace CoronavirusFunction.Services
     public interface IPcmDpcApi
     {
         [Get("/dpc-covid19-ita-andamento-nazionale.json")]
-        Task<IEnumerable<ItalianDataCountry>> GetItalianDataCountry();
+        Task<IEnumerable<PcmDpcCountryDto>> GetItalianDataCountry();
         [Get("/dpc-covid19-ita-regioni.json")]
-        Task<IEnumerable<ItalianDataAdminArea>> GetItalianDataAdminArea();
+        Task<IEnumerable<PcmDpcAdminAreaDto>> GetItalianDataAdminArea();
         [Get("/dpc-covid19-ita-province.json")]
-        Task<IEnumerable<ItalianDataSubAdminArea>> GetItalianDataSubAdminArea();
+        Task<IEnumerable<PcmDpcSubAdminAreaDto>> GetItalianDataSubAdminArea();
 
         [Get("/dpc-covid19-ita-andamento-nazionale-latest.json")]
-        Task<IEnumerable<ItalianDataCountry>> GetLastItalianDataCountry();
+        Task<IEnumerable<PcmDpcCountryDto>> GetLastItalianDataCountry();
         [Get("/dpc-covid19-ita-regioni-latest.json")]
-        Task<IEnumerable<ItalianDataAdminArea>> GetLastItalianDataAdminArea();
+        Task<IEnumerable<PcmDpcAdminAreaDto>> GetLastItalianDataAdminArea();
         [Get("/dpc-covid19-ita-province-latest.json")]
-        Task<IEnumerable<ItalianDataSubAdminArea>> GetLastItalianDataSubAdminArea();
+        Task<IEnumerable<PcmDpcSubAdminAreaDto>> GetLastItalianDataSubAdminArea();
     }
 }

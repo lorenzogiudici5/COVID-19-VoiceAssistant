@@ -37,13 +37,14 @@ namespace CoronavirusFunction.Models
             };
         }
 
-        protected CardResponse InitCardResponse(Location location, string textToSpeech, string displayText)
+        protected CardResponse InitCardResponse(LocationData data, string textToSpeech, string displayText)
         {
-            var speechMessage = buildSpeechResponse(location, textToSpeech);
-            var cardResponse = new CardResponse(location.Description, displayText, speechMessage);
+            // TODO: data could be null
+            var speechMessage = buildSpeechResponse(data, textToSpeech);
+            var cardResponse = new CardResponse(data.Description, displayText, speechMessage);
 
-            if (conversation.Source == Source.Dialogflow && !string.IsNullOrEmpty(location.ImageUri))
-                cardResponse.ImageUri = new Uri(location.ImageUri);
+            if (conversation.Source == Source.Dialogflow && data.FlagUri != null)
+                cardResponse.ImageUri = data.FlagUri;
 
             return cardResponse;
         }
@@ -87,22 +88,24 @@ namespace CoronavirusFunction.Models
                 $"{LocationDefinition.SubAdminArea.ToDescription()} di {city}" :
                 string.Empty;
 
-            return new Location()
+            var locationDto = new DialogflowLocationDto()
             {
                 Country = country,
                 AdminArea = adminArea,
+                SubadminArea = subAdminArea,
                 City = city,
-                SubadminArea = subAdminArea
             };
+
+            return locationDto.ToLocation();
         }
         private DateTimeOffset extractDate(Dictionary<string, Slot> slots)
         {
             var dateTimeStr = slots["Date"].Value;
             return !string.IsNullOrEmpty(dateTimeStr) ? DateTimeOffset.Parse(dateTimeStr) : DateTimeOffset.Now.Date;
         }
-        private string buildSpeechResponse(Location location, string speechMsg)
+        private string buildSpeechResponse(LocationData location, string speechMsg)
         {
-            var preposition = location.Definition == LocationDefinition.City ? "A" : "In";
+            var preposition = location is CityData ? "A" : "In";                // TODO: verifica
             return !string.IsNullOrEmpty(speechMsg) ? 
                 $"{preposition} {location.Description} {speechMsg}" : 
                 "Dati non disponibili";
