@@ -46,7 +46,7 @@ namespace CoronavirusFunction
                     return new BadRequestResult();
 
 
-                var culture = CultureInfo.GetCultureInfo(Conversation.Language);
+                var culture = CultureInfo.GetCultureInfo(Conversation.User.Language);
                 Resources.Resource.Culture = culture;
                 var x = Resources.Resource.Prova;
 
