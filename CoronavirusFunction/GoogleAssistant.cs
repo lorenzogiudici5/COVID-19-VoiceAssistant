@@ -13,6 +13,7 @@ using Google.Cloud.Dialogflow.V2;
 using CoronavirusFunction.Models;
 using CoronavirusFunction.Helpers;
 using CoronavirusFunction.Exceptions;
+using System.Globalization;
 
 namespace CoronavirusFunction
 {
@@ -37,11 +38,19 @@ namespace CoronavirusFunction
             {
                 log.LogInformation("Dialogflow HTTP Trigger");
 
+
                 RequestBody = await req.ReadAsStringAsync();
                 Conversation = InitConversation(RequestBody);                               // Build Conversation object
 
                 if (Conversation == null)
                     return new BadRequestResult();
+
+
+                var culture = CultureInfo.GetCultureInfo(Conversation.Language);
+                Resources.Resource.Culture = culture;
+                var x = Resources.Resource.Prova;
+
+                telemetryClient.TrackEvent($"LANGUAGE TEST: {Resources.Resource.Culture} - {x}");
 
                 dialogflowResponse = await Conversation.Handle(dialogflowRequest);          // Handle Conversation and build response
             }
