@@ -40,6 +40,11 @@ namespace CoronavirusFunction
                 if (Conversation == null)
                     return new BadRequestResult();
 
+                #if RELEASE
+                if (!await validateRequest(req, skillRequest))
+                    return new BadRequestResult();
+                #endif
+
                 skillResponse = await Conversation.Handle(skillRequest);                    // Handle Conversation and build response
             }
             catch (Exception ex)
@@ -71,6 +76,53 @@ namespace CoronavirusFunction
             var user = new Models.User() { UserId = userId, Language = language };
             return new Conversation(sessionId, user, Source.Alexa);
         }
-        #endregion
+#endregion
+
+#region Private Methods
+
+#endregion
+        private static async Task<bool> validateRequest(HttpRequest request, SkillRequest skillRequest)
+        {
+            request.Headers.TryGetValue("SignatureCertChainUrl", out var signatureChainUrl);
+            if (string.IsNullOrWhiteSpace(signatureChainUrl))
+            {
+                return false;
+            }
+
+            Uri certUrl;
+            try
+            {
+                certUrl = new Uri(signatureChainUrl);
+            }
+            catch
+            {
+                return false;
+            }
+
+            request.Headers.TryGetValue("Signature", out var signature);
+            if (string.IsNullOrWhiteSpace(signature))
+            {
+                return false;
+            }
+
+            request.Body.Position = 0;
+            var body = await request.ReadAsStringAsync();
+            request.Body.Position = 0;
+
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                return false;
+            }
+
+            bool valid = await RequestVerification.Verify(signature, certUrl, body);
+            bool isTimestampValid = RequestVerification.RequestTimestampWithinTolerance(skillRequest);
+
+            if (!isTimestampValid)
+            {
+                valid = false;
+            }
+
+            return valid;
+        }
     }
 }

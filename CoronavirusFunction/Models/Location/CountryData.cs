@@ -9,7 +9,7 @@ namespace CoronavirusFunction.Models
         }
 
         public override string Description => !string.IsNullOrEmpty(this.ItalianName) ? this.ItalianName : "Italia";
-        public override Uri FlagUri => new Uri($"https://raw.githubusercontent.com/NovelCOVID/API/master/assets/flags/{this.Iso2}.png");
+        public override Uri FlagUri => new Uri($"https://raw.githubusercontent.com/NovelCOVID/API/master/assets/flags/{this.Iso2.ToLower()}.png");
 
         public long Id { get; set; }
         public string ItalianName { get; set; }
