@@ -20,6 +20,7 @@ Alexa Skill e Google Assistant Action per fornire i numeri relativi alla diffusi
 
 ## Backend
 Azure function .NET core
+[![Build Status](https://dev.azure.com/lorenzogiudici5/Coronavirus/_apis/build/status/Coronavirus-Azure%20Functions%20for%20.NET-CI?branchName=master)](https://dev.azure.com/lorenzogiudici5/Coronavirus/_build/latest?definitionId=1&branchName=master)
 
 ## Contributors
 ### Alexa Interaction Model
