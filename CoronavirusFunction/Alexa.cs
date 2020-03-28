@@ -40,7 +40,7 @@ namespace CoronavirusFunction
                 if (Conversation == null)
                     return new BadRequestResult();
 
-                #if DEPLOY
+                #if RELEASE
                 if (!await validateRequest(req, skillRequest))
                     return new BadRequestResult();
                 #endif
