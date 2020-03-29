@@ -54,6 +54,8 @@ namespace CoronavirusFunction
                     ex is IntentException ?
                     ResponseBuilder.Ask(ex.Message, reprompt) :
                     ResponseBuilder.Ask("C'è stato un imprevisto. Scusa.", reprompt);
+                
+                telemetryClient.TrackException(ex);
             }
             finally
             {
