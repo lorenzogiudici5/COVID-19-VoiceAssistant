@@ -39,7 +39,6 @@ namespace CoronavirusFunction.Models
 
         protected CardResponse InitCardResponse(LocationData data, string textToSpeech, string displayText)
         {
-            // TODO: data could be null
             var speechMessage = buildSpeechResponse(data, textToSpeech);
             var cardResponse = new CardResponse(data.Description, displayText, speechMessage);
 
@@ -101,8 +100,8 @@ namespace CoronavirusFunction.Models
         }
         private string buildSpeechResponse(LocationData location, string speechMsg)
         {
-            var preposition = location is CityData ? "A" : "In";                // TODO: verifica
-            return !string.IsNullOrEmpty(speechMsg) ? 
+            var preposition = location == null ? default(string) : location is WorldData ? "Nel" : location is CityData ? "A" : "In";
+            return location != null && !string.IsNullOrEmpty(speechMsg) ? 
                 $"{preposition} {location.Description} {speechMsg}" : 
                 "Dati non disponibili";
         }
