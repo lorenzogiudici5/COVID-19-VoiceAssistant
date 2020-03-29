@@ -6,6 +6,9 @@ namespace CoronavirusFunction.Services
 {
     interface INovelCovidApi
     {
+        [Get("/all")]
+        Task<NovelWorldDto> GeWorldData();
+
         [Get("/countries/{countryCode}")]
         Task<NovelCountryDto> GeCountryData(string countryCode);
     }

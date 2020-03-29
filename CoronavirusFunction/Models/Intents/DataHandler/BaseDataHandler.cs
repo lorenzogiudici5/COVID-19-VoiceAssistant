@@ -60,7 +60,7 @@ namespace CoronavirusFunction.Models
 
             var locationDto = !string.IsNullOrEmpty(locationParam) ?
                 JsonConvert.DeserializeObject<DialogflowLocationDto>(locationParam) :
-                new DialogflowLocationDto() { Country = "Italia" };
+                new DialogflowLocationDto() { };
 
             return locationDto.ToLocation();
         }
@@ -78,10 +78,6 @@ namespace CoronavirusFunction.Models
             var adminArea = slots["AdminArea"].Value;
             var city = slots["City"].Value;
             var locationDefinition = slots["LocationDefinition"].Resolution?.Authorities[0].Values[0].Value.Id;
-
-            // TODO: Default value if empty (remove when other countries will be added)
-            if (string.IsNullOrEmpty(adminArea) && string.IsNullOrEmpty(city) && string.IsNullOrEmpty(country))
-                country = "Italia";
 
             // TODO: change for not italian request
             var subAdminArea = !string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(locationDefinition) && (LocationDefinition)System.Enum.Parse(typeof(LocationDefinition), locationDefinition) == LocationDefinition.SubAdminArea ?
