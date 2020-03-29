@@ -1,7 +1,7 @@
 ﻿using CoronavirusFunction.Models;
 namespace CoronavirusFunction.Helpers.Mappers
 {
-    public static class NovelCountryDtoMapper
+    public static class NovelDtoMapper
     {
         public static CountryData ToCountryData(this NovelCountryDto novelCountry, string italianName)
         {
@@ -19,7 +19,22 @@ namespace CoronavirusFunction.Helpers.Mappers
                 TotaleAttualmentePositivi = novelCountry.Active,
                 Deceduti = novelCountry.Deaths,
                 TerapiaIntensiva = novelCountry.Critical,
-                NuoviAttualmentePositivi = novelCountry.TodayCases
+                NuoviAttualmentePositivi = novelCountry.TodayCases,
+                DimessiGuariti = novelCountry.Recovered, 
+            };
+
+        }
+
+        public static WorldData ToWorldData(this NovelWorldDto novelWorld)
+        {
+            // if culture == it-it -> "Mondo!"
+            var name = "Mondo";
+            return new WorldData(name)
+            {
+                TotaleCasi = novelWorld.Cases,
+                TotaleAttualmentePositivi = novelWorld.Active,
+                Deceduti = novelWorld.Deaths,
+                DimessiGuariti = novelWorld.Recovered,
             };
 
         }
