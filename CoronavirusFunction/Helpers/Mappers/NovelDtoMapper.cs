@@ -18,12 +18,12 @@ namespace CoronavirusFunction.Helpers.Mappers
                 Lat = novelCountry.CountryInfo.Lat,
                 Long = novelCountry.CountryInfo.Long,
                 
-                TotaleCasi = novelCountry.Cases,
-                TotaleAttualmentePositivi = novelCountry.Active,
-                Deceduti = novelCountry.Deaths,
-                TerapiaIntensiva = novelCountry.Critical,
-                NuoviAttualmentePositivi = novelCountry.TodayCases,
-                DimessiGuariti = novelCountry.Recovered,
+                Cases = novelCountry.Cases,
+                Active = novelCountry.Active,
+                Deaths = novelCountry.Deaths,
+                Critical = novelCountry.Critical,
+                TodayCases = novelCountry.TodayCases,
+                Recovered = novelCountry.Recovered,
                 Date = novelCountry.Date
             };
         }
@@ -37,10 +37,10 @@ namespace CoronavirusFunction.Helpers.Mappers
             
             return new WorldData(name)
             {
-                TotaleCasi = novelWorld.Cases,
-                TotaleAttualmentePositivi = novelWorld.Active,
-                Deceduti = novelWorld.Deaths,
-                DimessiGuariti = novelWorld.Recovered,
+                Cases = novelWorld.Cases,
+                Active = novelWorld.Active,
+                Deaths = novelWorld.Deaths,
+                Recovered = novelWorld.Recovered,
                 Date = novelWorld.Date
             };
         }

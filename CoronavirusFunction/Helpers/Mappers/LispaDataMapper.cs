@@ -13,9 +13,9 @@ namespace CoronavirusFunction.Helpers
             {
                 CodIstatn = lispaData.CodIstatn,
                 Fid = lispaData.Fid,
-                TotaleCasi = lispaData.Totale,
-                TotaleAttualmentePositivi = lispaData.Positivi,
-                Deceduti = lispaData.Deceduti
+                Cases = lispaData.Totale,
+                Active = lispaData.Positivi,
+                Deaths = lispaData.Deceduti
             };
         }
     }
