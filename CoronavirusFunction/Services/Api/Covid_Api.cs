@@ -22,6 +22,9 @@ namespace CoronavirusFunction.Services
 
             switch (location.Definition)
             {
+                case LocationDefinition.World:
+                    dati = await Covid_Api.GetWorldData();
+                    break;
                 case LocationDefinition.Country:
                     dati = await Covid_Api.GetCountryData(location.Name, date); 
                     break;
@@ -38,6 +41,13 @@ namespace CoronavirusFunction.Services
             }
 
             return dati;
+        }
+
+        public static async Task<LocationData> GetWorldData(DateTimeOffset? date = null)
+        {
+            var novelApi = RestService.For<INovelCovidApi>(BASEURL_NOVEL);
+            var novelData = await novelApi.GeWorldData();
+            return novelData.ToWorldData();
         }
 
         public static async Task<LocationData> GetCountryData(string country, DateTimeOffset? date = null)

@@ -17,7 +17,8 @@ namespace CoronavirusFunction.Helpers
                 !string.IsNullOrEmpty(locationDto.AdminArea) ? LocationDefinition.AdminArea :
                 !string.IsNullOrEmpty(subAdminArea) ? LocationDefinition.SubAdminArea :
                 !string.IsNullOrEmpty(locationDto.Country) ? LocationDefinition.Country :
-                LocationDefinition.City;
+                !string.IsNullOrEmpty(locationDto.City) ? LocationDefinition.City :
+                LocationDefinition.World;
 
             var name = definition switch
             {

@@ -19,29 +19,32 @@ namespace CoronavirusFunction.Models
         public string Country { get; set; }
         public DateTimeOffset Date { get; set; }
 
-        public long? RicoveratiConSintomi { get; set; }
-        public long? TerapiaIntensiva { get; set; }
-        public long? TotaleOspedalizzati { get; set; }
-        public long? IsolamentoDomiciliare { get; set; }
-        public long? TotaleAttualmentePositivi { get; set; }
-        public long? NuoviAttualmentePositivi { get; set; }
-        public long? DimessiGuariti { get; set; }
-        public long? Deceduti { get; set; }
-        public long? TotaleCasi { get; set; }
-        public long? Tamponi { get; set; }
+        public long? NotCritical { get; set; }
+        public long? Critical { get; set; }
+        public long? Hospedalized { get; set; }
+        public long? Quarantine { get; set; }
+        public long? Active { get; set; }
+        public long? TodayCases { get; set; }
+        public long? Recovered { get; set; }
+        public long? Deaths { get; set; }
+        public long? Cases { get; set; }
+        public long? Test { get; set; }
+        public float? MortalityRate => Deaths != 0 && Cases != 0 ?  (float) Deaths / Cases : default(float?);
 
-        public string ToLongStringConfirmed() => this.TotaleCasi != null ? $"Il totale dei casi confermati è {TotaleCasi}" : default(string);
-        public string ToLongStringPositive() => this.TotaleAttualmentePositivi != null ? $"Il numero dei positivi è {TotaleAttualmentePositivi}" : default(string);
-        public string ToLongStringDeaths() => this.Deceduti != null ? $"Il numero dei deceduti è {Deceduti}" : default(string);
+        public string ToLongStringConfirmed() => this.Cases != null ? $"Il totale dei casi confermati è {Cases}" : default(string);
+        public string ToLongStringPositive() => this.Active != null ? $"Il numero dei positivi è {Active}" : default(string);
+        public string ToLongStringDeaths() => this.Deaths != null ? $"Il numero dei deceduti è {Deaths}" : default(string);
 
-        public string ToShortStringConfirmed() => this.TotaleCasi != null ? $"Totale casi: {TotaleCasi}" : default(string);
-        public string ToShortStringPositive() => this.TotaleAttualmentePositivi != null ? $"Attualmente Positivi: {TotaleAttualmentePositivi}" : default(string);
-        public string ToShortStringDeaths() => this.Deceduti != null ? $"Deceduti: {Deceduti}" : default(string);
-        public string ToShortStringTest() => this.Tamponi != null ? $"Tamponi: {Tamponi}" : default(string);
-        public string ToShortStringRecovered() => this.DimessiGuariti != null ? $"Guariti: {DimessiGuariti}" : default(string);
-        public string ToShortStringHospitalized() => this.TotaleOspedalizzati != null ? $"Ospedalizzati: {TotaleOspedalizzati}" : default(string);
-        public string ToShortStringTherapy() => this.TerapiaIntensiva != null ? $"Terapia intensiva: {TerapiaIntensiva}" : default(string);
-        
+        public string ToShortStringConfirmed() => this.Cases != null ? $"Totale casi: {Cases}" : default(string);
+        public string ToShortStringPositive() => this.Active != null ? $"Attualmente Positivi: {Active}" : default(string);
+        public string ToShortStringDeaths() => this.Deaths != null ? $"Deceduti: {Deaths}" : default(string);
+        public string ToShortStringTest() => this.Test != null ? $"Tamponi: {Test}" : default(string);
+        public string ToShortStringRecovered() => this.Recovered != null ? $"Guariti: {Recovered}" : default(string);
+        public string ToShortStringHospitalized() => this.Hospedalized != null ? $"Ospedalizzati: {Hospedalized}" : default(string);
+        public string ToShortStringTherapy() => this.Critical != null ? $"Terapia intensiva: {Critical}" : default(string);
+        public string ToShortStringNewPositive() => this.TodayCases != null ? $"Nuovi positivi: {TodayCases}" : default(string);
+        public string ToShortStringMortalityRate() => this.MortalityRate != null ? $"Tasso di mortalità: {String.Format("{0:0.##}", MortalityRate)}% " : default(string);
+
 
         public string ToSpeechSummary(LocationDefinition locationDefinition)
         {
@@ -59,6 +62,8 @@ namespace CoronavirusFunction.Models
                 this.ToShortStringConfirmed(),
                 this.ToShortStringPositive(),
                 this.ToShortStringDeaths(),
+                this.ToShortStringMortalityRate(),
+                this.ToShortStringNewPositive(),
                 this.ToShortStringTest(),
                 this.ToShortStringRecovered(),
                 this.ToShortStringHospitalized(),

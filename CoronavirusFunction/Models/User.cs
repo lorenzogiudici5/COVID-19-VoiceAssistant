@@ -9,6 +9,6 @@ namespace CoronavirusFunction.Models
 
         public DateTimeOffset? LastSeen { get; set; }
         public bool IsReturningUser => LastSeen.HasValue;
-        public string Language { get; set; }
+        public string Locale { get; set; }
     }
 }

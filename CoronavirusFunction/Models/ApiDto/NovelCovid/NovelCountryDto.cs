@@ -3,22 +3,13 @@ using System;
 
 namespace CoronavirusFunction.Models
 {
-    public partial class NovelCountryDto
+    public partial class NovelCountryDto : NovelWorldDto
     {
         [JsonProperty("country")]
         public string Country { get; set; }
 
         [JsonProperty("countryInfo")]
         public CountryInfo CountryInfo { get; set; }
-
-        [JsonProperty("cases")]
-        public long Cases { get; set; }
-        [JsonProperty("deaths")]
-        public long Deaths { get; set; }
-        [JsonProperty("recovered")]
-        public long Recovered { get; set; }
-        [JsonProperty("active")]
-        public long Active { get; set; }
         [JsonProperty("critical")]
         public long Critical { get; set; }
 

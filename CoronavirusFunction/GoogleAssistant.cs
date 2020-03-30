@@ -59,6 +59,8 @@ namespace CoronavirusFunction
                     ex is IntentException ?
                     ex.Message : 
                     "C'è stato un imprevisto. Scusa, riprova.";
+
+                telemetryClient.TrackException(ex);
             }
             finally
             {

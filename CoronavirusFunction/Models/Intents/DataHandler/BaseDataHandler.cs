@@ -5,6 +5,7 @@ using Alexa.NET.Request;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using CoronavirusFunction.Helpers;
+using System.Globalization;
 
 namespace CoronavirusFunction.Models
 {
@@ -39,12 +40,13 @@ namespace CoronavirusFunction.Models
 
         protected CardResponse InitCardResponse(LocationData data, string textToSpeech, string displayText)
         {
-            // TODO: data could be null
             var speechMessage = buildSpeechResponse(data, textToSpeech);
-            var cardResponse = new CardResponse(data.Description, displayText, speechMessage);
-
-            if (conversation.Source == Source.Dialogflow && data.FlagUri != null)
-                cardResponse.ImageUri = data.FlagUri;
+            var cardResponse = new CardResponse(data?.Description, displayText, speechMessage);
+            if(data != null)
+            {
+                cardResponse.Subtitle = data.Date.Date.ToString("d", CultureInfo.CreateSpecificCulture(this.conversation.User.Locale));
+                cardResponse.ImageUri = conversation.Source == Source.Dialogflow && data.FlagUri != null ? data.FlagUri : null;
+            }
 
             return cardResponse;
         }
@@ -60,7 +62,7 @@ namespace CoronavirusFunction.Models
 
             var locationDto = !string.IsNullOrEmpty(locationParam) ?
                 JsonConvert.DeserializeObject<DialogflowLocationDto>(locationParam) :
-                new DialogflowLocationDto() { Country = "Italia" };
+                new DialogflowLocationDto() { };
 
             return locationDto.ToLocation();
         }
@@ -78,10 +80,6 @@ namespace CoronavirusFunction.Models
             var adminArea = slots["AdminArea"].Value;
             var city = slots["City"].Value;
             var locationDefinition = slots["LocationDefinition"].Resolution?.Authorities[0].Values[0].Value.Id;
-
-            // TODO: Default value if empty (remove when other countries will be added)
-            if (string.IsNullOrEmpty(adminArea) && string.IsNullOrEmpty(city) && string.IsNullOrEmpty(country))
-                country = "Italia";
 
             // TODO: change for not italian request
             var subAdminArea = !string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(locationDefinition) && (LocationDefinition)System.Enum.Parse(typeof(LocationDefinition), locationDefinition) == LocationDefinition.SubAdminArea ?
@@ -105,8 +103,8 @@ namespace CoronavirusFunction.Models
         }
         private string buildSpeechResponse(LocationData location, string speechMsg)
         {
-            var preposition = location is CityData ? "A" : "In";                // TODO: verifica
-            return !string.IsNullOrEmpty(speechMsg) ? 
+            var preposition = location == null ? default(string) : location is WorldData ? "Nel" : location is CityData ? "A" : "In";
+            return location != null && !string.IsNullOrEmpty(speechMsg) ? 
                 $"{preposition} {location.Description} {speechMsg}" : 
                 "Dati non disponibili";
         }

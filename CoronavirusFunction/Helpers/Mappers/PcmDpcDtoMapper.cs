@@ -6,6 +6,9 @@ namespace CoronavirusFunction.Helpers
     {
         public static CountryData ToCountryData(this PcmDpcCountryDto countryDto)
         {
+            if (countryDto == null)
+                return null;
+
             return new CountryData(countryDto.Description)
             {
                 ItalianName = countryDto.Description,
@@ -16,22 +19,25 @@ namespace CoronavirusFunction.Helpers
                 //Long = countryDto.Long,
                 //FlagUri = "",
 
-                TotaleCasi = countryDto.TotaleCasi,
-                TotaleAttualmentePositivi = countryDto.TotaleAttualmentePositivi,
-                Deceduti = countryDto.Deceduti,
-                TerapiaIntensiva = countryDto.TerapiaIntensiva,
-                DimessiGuariti = countryDto.DimessiGuariti,
-                IsolamentoDomiciliare = countryDto.IsolamentoDomiciliare,
-                NuoviAttualmentePositivi = countryDto.NuoviAttualmentePositivi,
-                RicoveratiConSintomi = countryDto.RicoveratiConSintomi,
-                Tamponi = countryDto.Tamponi,
-                TotaleOspedalizzati = countryDto.TotaleOspedalizzati,
+                Cases = countryDto.TotaleCasi,
+                Active = countryDto.TotaleAttualmentePositivi,
+                Deaths = countryDto.Deceduti,
+                Critical = countryDto.TerapiaIntensiva,
+                Recovered = countryDto.DimessiGuariti,
+                Quarantine = countryDto.IsolamentoDomiciliare,
+                TodayCases = countryDto.NuoviAttualmentePositivi,
+                NotCritical = countryDto.RicoveratiConSintomi,
+                Test = countryDto.Tamponi,
+                Hospedalized = countryDto.TotaleOspedalizzati,
                 Date = countryDto.Date,               
             };
         }
 
         public static AdminAreaData ToAdminAreaData(this PcmDpcAdminAreaDto adminAreaDto)
         {
+            if (adminAreaDto == null)
+                return null;
+
             return new AdminAreaData(adminAreaDto.Description)
             {
                 Country = adminAreaDto.Stato,
@@ -39,22 +45,25 @@ namespace CoronavirusFunction.Helpers
                 Long = adminAreaDto.Long,
                 CodiceRegione = adminAreaDto.CodiceRegione,
                 
-                TotaleCasi = adminAreaDto.TotaleCasi,
-                TotaleAttualmentePositivi = adminAreaDto.TotaleAttualmentePositivi,
-                Deceduti = adminAreaDto.Deceduti,
-                TerapiaIntensiva = adminAreaDto.TerapiaIntensiva,
-                DimessiGuariti = adminAreaDto.DimessiGuariti,
-                IsolamentoDomiciliare = adminAreaDto.IsolamentoDomiciliare,
-                NuoviAttualmentePositivi = adminAreaDto.NuoviAttualmentePositivi,
-                RicoveratiConSintomi = adminAreaDto.RicoveratiConSintomi,
-                Tamponi = adminAreaDto.Tamponi,
-                TotaleOspedalizzati = adminAreaDto.TotaleOspedalizzati,
+                Cases = adminAreaDto.TotaleCasi,
+                Active = adminAreaDto.TotaleAttualmentePositivi,
+                Deaths = adminAreaDto.Deceduti,
+                Critical = adminAreaDto.TerapiaIntensiva,
+                Recovered = adminAreaDto.DimessiGuariti,
+                Quarantine = adminAreaDto.IsolamentoDomiciliare,
+                TodayCases = adminAreaDto.NuoviAttualmentePositivi,
+                NotCritical = adminAreaDto.RicoveratiConSintomi,
+                Test = adminAreaDto.Tamponi,
+                Hospedalized = adminAreaDto.TotaleOspedalizzati,
                 Date = adminAreaDto.Date,
             };
         }
 
         public static SubAdminAreaData ToSubAdminAreaData(this PcmDpcSubAdminAreaDto subAdminAreaDto)
         {
+            if (subAdminAreaDto == null)
+                return null;
+
             return new SubAdminAreaData(subAdminAreaDto.Description)
             {
                 Country = subAdminAreaDto.Stato,
@@ -65,16 +74,16 @@ namespace CoronavirusFunction.Helpers
                 Region = subAdminAreaDto.DenominazioneRegione,
                 CodiceRegione = subAdminAreaDto.CodiceRegione,
 
-                TotaleCasi = subAdminAreaDto.TotaleCasi,
-                TotaleAttualmentePositivi = subAdminAreaDto.TotaleAttualmentePositivi,
-                Deceduti = subAdminAreaDto.Deceduti,
-                TerapiaIntensiva = subAdminAreaDto.TerapiaIntensiva,
-                DimessiGuariti = subAdminAreaDto.DimessiGuariti,
-                IsolamentoDomiciliare = subAdminAreaDto.IsolamentoDomiciliare,
-                NuoviAttualmentePositivi = subAdminAreaDto.NuoviAttualmentePositivi,
-                RicoveratiConSintomi = subAdminAreaDto.RicoveratiConSintomi,
-                Tamponi = subAdminAreaDto.Tamponi,
-                TotaleOspedalizzati = subAdminAreaDto.TotaleOspedalizzati,
+                Cases = subAdminAreaDto.TotaleCasi,
+                Active = subAdminAreaDto.TotaleAttualmentePositivi,
+                Deaths = subAdminAreaDto.Deceduti,
+                Critical = subAdminAreaDto.TerapiaIntensiva,
+                Recovered = subAdminAreaDto.DimessiGuariti,
+                Quarantine = subAdminAreaDto.IsolamentoDomiciliare,
+                TodayCases = subAdminAreaDto.NuoviAttualmentePositivi,
+                NotCritical = subAdminAreaDto.RicoveratiConSintomi,
+                Test = subAdminAreaDto.Tamponi,
+                Hospedalized = subAdminAreaDto.TotaleOspedalizzati,
                 Date = subAdminAreaDto.Date,
             };
         }

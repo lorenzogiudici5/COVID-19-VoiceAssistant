@@ -54,6 +54,8 @@ namespace CoronavirusFunction
                     ex is IntentException ?
                     ResponseBuilder.Ask(ex.Message, reprompt) :
                     ResponseBuilder.Ask("C'è stato un imprevisto. Scusa.", reprompt);
+                
+                telemetryClient.TrackException(ex);
             }
             finally
             {
@@ -73,7 +75,7 @@ namespace CoronavirusFunction
             var sessionId = skillRequest.Session.SessionId;
             var language = skillRequest.Request.Locale;
             var userId = skillRequest.Session.User?.UserId;
-            var user = new Models.User() { UserId = userId, Language = language };
+            var user = new Models.User() { UserId = userId, Locale = language };
             return new Conversation(sessionId, user, Source.Alexa);
         }
 #endregion

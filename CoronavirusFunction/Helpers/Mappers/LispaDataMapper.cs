@@ -1,4 +1,5 @@
 ﻿using CoronavirusFunction.Models;
+using System;
 
 namespace CoronavirusFunction.Helpers
 {
@@ -6,13 +7,17 @@ namespace CoronavirusFunction.Helpers
     {
         public static LocationData ToLocationData(this LispaDataCity lispaData)
         {
+            if (lispaData == null)
+                return null;
+
             return new CityData(lispaData.NomeCom)
             {
                 CodIstatn = lispaData.CodIstatn,
                 Fid = lispaData.Fid,
-                TotaleCasi = lispaData.Totale,
-                TotaleAttualmentePositivi = lispaData.Positivi,
-                Deceduti = lispaData.Deceduti
+                Cases = lispaData.Totale,
+                Active = lispaData.Positivi,
+                Deaths = lispaData.Deceduti,
+                Date = DateTimeOffset.Now.Date
             };
         }
     }

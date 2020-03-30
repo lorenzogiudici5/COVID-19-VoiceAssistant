@@ -10,7 +10,7 @@ namespace CoronavirusFunction.Helpers
             {
                 UserId = userDto.UserId,
                 LastSeen = userDto.LastSeen,
-                Language = userDto.Locale
+                Locale = !string.IsNullOrEmpty(userDto.Locale) ? userDto.Locale : "it-IT"              // default culture
             };
         }
     }
