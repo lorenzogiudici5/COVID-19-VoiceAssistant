@@ -5,6 +5,7 @@ using Alexa.NET.Request;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using CoronavirusFunction.Helpers;
+using System.Globalization;
 
 namespace CoronavirusFunction.Models
 {
@@ -43,7 +44,7 @@ namespace CoronavirusFunction.Models
             var cardResponse = new CardResponse(data?.Description, displayText, speechMessage);
             if(data != null)
             {
-                cardResponse.Subtitle = !data.Date.HasValue ? DateTimeOffset.Now.Date.ToShortDateString() : data.Date.Value.Date.ToShortDateString();
+                cardResponse.Subtitle = data.Date.Date.ToString("d", CultureInfo.CreateSpecificCulture(this.conversation.User.Locale));
                 cardResponse.ImageUri = conversation.Source == Source.Dialogflow && data.FlagUri != null ? data.FlagUri : null;
             }
 

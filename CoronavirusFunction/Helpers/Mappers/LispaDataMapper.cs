@@ -1,4 +1,5 @@
 ﻿using CoronavirusFunction.Models;
+using System;
 
 namespace CoronavirusFunction.Helpers
 {
@@ -15,7 +16,8 @@ namespace CoronavirusFunction.Helpers
                 Fid = lispaData.Fid,
                 Cases = lispaData.Totale,
                 Active = lispaData.Positivi,
-                Deaths = lispaData.Deceduti
+                Deaths = lispaData.Deceduti,
+                Date = DateTimeOffset.Now.Date
             };
         }
     }

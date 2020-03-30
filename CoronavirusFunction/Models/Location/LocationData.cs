@@ -17,7 +17,7 @@ namespace CoronavirusFunction.Models
         public double Lat { get; set; }
         public double Long { get; set; }
         public string Country { get; set; }
-        public DateTimeOffset? Date { get; set; }
+        public DateTimeOffset Date { get; set; }
 
         public long? NotCritical { get; set; }
         public long? Critical { get; set; }
