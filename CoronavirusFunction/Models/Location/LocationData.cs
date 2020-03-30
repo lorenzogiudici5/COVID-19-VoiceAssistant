@@ -41,7 +41,8 @@ namespace CoronavirusFunction.Models
         public string ToShortStringRecovered() => this.DimessiGuariti != null ? $"Guariti: {DimessiGuariti}" : default(string);
         public string ToShortStringHospitalized() => this.TotaleOspedalizzati != null ? $"Ospedalizzati: {TotaleOspedalizzati}" : default(string);
         public string ToShortStringTherapy() => this.TerapiaIntensiva != null ? $"Terapia intensiva: {TerapiaIntensiva}" : default(string);
-        
+        public string ToShortStringNewPositive() => this.NuoviAttualmentePositivi != null ? $"Nuovi positivi: {NuoviAttualmentePositivi}" : default(string);
+
 
         public string ToSpeechSummary(LocationDefinition locationDefinition)
         {
@@ -59,6 +60,7 @@ namespace CoronavirusFunction.Models
                 this.ToShortStringConfirmed(),
                 this.ToShortStringPositive(),
                 this.ToShortStringDeaths(),
+                this.ToShortStringNewPositive(),
                 this.ToShortStringTest(),
                 this.ToShortStringRecovered(),
                 this.ToShortStringHospitalized(),
