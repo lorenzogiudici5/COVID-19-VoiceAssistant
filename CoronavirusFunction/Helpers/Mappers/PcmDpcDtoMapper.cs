@@ -6,6 +6,9 @@ namespace CoronavirusFunction.Helpers
     {
         public static CountryData ToCountryData(this PcmDpcCountryDto countryDto)
         {
+            if (countryDto == null)
+                return null;
+
             return new CountryData(countryDto.Description)
             {
                 ItalianName = countryDto.Description,
@@ -32,6 +35,9 @@ namespace CoronavirusFunction.Helpers
 
         public static AdminAreaData ToAdminAreaData(this PcmDpcAdminAreaDto adminAreaDto)
         {
+            if (adminAreaDto == null)
+                return null;
+
             return new AdminAreaData(adminAreaDto.Description)
             {
                 Country = adminAreaDto.Stato,
@@ -55,6 +61,9 @@ namespace CoronavirusFunction.Helpers
 
         public static SubAdminAreaData ToSubAdminAreaData(this PcmDpcSubAdminAreaDto subAdminAreaDto)
         {
+            if (subAdminAreaDto == null)
+                return null;
+
             return new SubAdminAreaData(subAdminAreaDto.Description)
             {
                 Country = subAdminAreaDto.Stato,

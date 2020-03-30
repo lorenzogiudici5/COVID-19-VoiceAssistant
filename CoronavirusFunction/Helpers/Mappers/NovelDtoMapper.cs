@@ -5,6 +5,9 @@ namespace CoronavirusFunction.Helpers.Mappers
     {
         public static CountryData ToCountryData(this NovelCountryDto novelCountry, string italianName)
         {
+            if (novelCountry == null)
+                return null;
+            
             return new CountryData(italianName)
             {
                 ItalianName = italianName,
@@ -20,23 +23,26 @@ namespace CoronavirusFunction.Helpers.Mappers
                 Deceduti = novelCountry.Deaths,
                 TerapiaIntensiva = novelCountry.Critical,
                 NuoviAttualmentePositivi = novelCountry.TodayCases,
-                DimessiGuariti = novelCountry.Recovered, 
+                DimessiGuariti = novelCountry.Recovered,
+                Date = novelCountry.Date
             };
-
         }
 
         public static WorldData ToWorldData(this NovelWorldDto novelWorld)
         {
             // if culture == it-it -> "Mondo!"
             var name = "Mondo";
+            if (novelWorld == null)
+                return null;
+            
             return new WorldData(name)
             {
                 TotaleCasi = novelWorld.Cases,
                 TotaleAttualmentePositivi = novelWorld.Active,
                 Deceduti = novelWorld.Deaths,
                 DimessiGuariti = novelWorld.Recovered,
+                Date = novelWorld.Date
             };
-
         }
     }
 }

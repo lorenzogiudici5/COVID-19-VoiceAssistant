@@ -6,6 +6,9 @@ namespace CoronavirusFunction.Helpers
     {
         public static LocationData ToLocationData(this LispaDataCity lispaData)
         {
+            if (lispaData == null)
+                return null;
+
             return new CityData(lispaData.NomeCom)
             {
                 CodIstatn = lispaData.CodIstatn,

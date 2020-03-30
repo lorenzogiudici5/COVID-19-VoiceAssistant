@@ -40,11 +40,12 @@ namespace CoronavirusFunction.Models
         protected CardResponse InitCardResponse(LocationData data, string textToSpeech, string displayText)
         {
             var speechMessage = buildSpeechResponse(data, textToSpeech);
-            var cardResponse = new CardResponse(data.Description, displayText, speechMessage);
-            cardResponse.Subtitle = !data.Date.HasValue ? DateTimeOffset.Now.Date.ToShortDateString() : data.Date.Value.Date.ToShortDateString();
-
-            if (conversation.Source == Source.Dialogflow && data.FlagUri != null)
-                cardResponse.ImageUri = data.FlagUri;
+            var cardResponse = new CardResponse(data?.Description, displayText, speechMessage);
+            if(data != null)
+            {
+                cardResponse.Subtitle = !data.Date.HasValue ? DateTimeOffset.Now.Date.ToShortDateString() : data.Date.Value.Date.ToShortDateString();
+                cardResponse.ImageUri = conversation.Source == Source.Dialogflow && data.FlagUri != null ? data.FlagUri : null;
+            }
 
             return cardResponse;
         }
