@@ -6,17 +6,18 @@ Alexa Skill e Google Assistant Action per fornire i numeri relativi alla diffusi
 </p>
 
 ## Dati
-| | Totale Confermati | Positivi | Deceduti | Dimessi | Critici | Tamponi | Ospedalizzati |
-| ---------------     | :---:  | :---:  | :---:  | :---:  | :---:  | :---:  | :---:  |
-| Stati del mondo     |          X        |     X    |     X    |    X    |    X    |  |  |
-| Italia              |          X        |     X    |     X    |    X    |    X    |  X | X |
-| Regioni italiane    |          X        |     X    |     X    |    X    |    X    |  X | X |
-| Province italiane   |          X        |          |          |         |         |  |  |
-| Comuni lombardi     |          X        |     X    |      X   |         |         |  |  |
+| | Totale Confermati | Positivi | Deceduti | Dimessi | Critici | Tamponi | Ospedalizzati | Storico |
+| ---------------     | :---:  | :---:  | :---:  | :---:  | :---:  | :---:  | :---:  | :---:  |
+| Stati del mondo     |          X        |     X    |     X    |    X    |    X    |  |  | |
+| Italia              |          X        |     X    |     X    |    X    |    X    |  X | X | X |
+| Regioni italiane    |          X        |     X    |     X    |    X    |    X    |  X | X | X |
+| Province italiane   |          X        |          |          |         |         |  |  | X |
+| Comuni lombardi     |          X        |     X    |      X   |         |         |  |  | |
 
 ### Sorgenti
 - [NovelCOVID API](https://github.com/NovelCOVID/API)
 - [Pcm-Dpc COVID-19](https://github.com/pcm-dpc/COVID-19)
+- [Lombardia informatica](https://www.lispa.it/wps/portal/LISPA/Home)
 
 ## Backend
 Azure function .NET core
