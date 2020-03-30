@@ -29,6 +29,7 @@ namespace CoronavirusFunction.Models
         public long? Deceduti { get; set; }
         public long? TotaleCasi { get; set; }
         public long? Tamponi { get; set; }
+        public float? TassoMortalità => Deceduti != 0 && TotaleCasi != 0 ?  (float) Deceduti / TotaleCasi : default(float?);
 
         public string ToLongStringConfirmed() => this.TotaleCasi != null ? $"Il totale dei casi confermati è {TotaleCasi}" : default(string);
         public string ToLongStringPositive() => this.TotaleAttualmentePositivi != null ? $"Il numero dei positivi è {TotaleAttualmentePositivi}" : default(string);
@@ -42,6 +43,7 @@ namespace CoronavirusFunction.Models
         public string ToShortStringHospitalized() => this.TotaleOspedalizzati != null ? $"Ospedalizzati: {TotaleOspedalizzati}" : default(string);
         public string ToShortStringTherapy() => this.TerapiaIntensiva != null ? $"Terapia intensiva: {TerapiaIntensiva}" : default(string);
         public string ToShortStringNewPositive() => this.NuoviAttualmentePositivi != null ? $"Nuovi positivi: {NuoviAttualmentePositivi}" : default(string);
+        public string ToShortStringMortalityRate() => this.TassoMortalità != null ? $"Tasso di mortalità: {String.Format("{0:0.##}", TassoMortalità)}% " : default(string);
 
 
         public string ToSpeechSummary(LocationDefinition locationDefinition)
@@ -60,6 +62,7 @@ namespace CoronavirusFunction.Models
                 this.ToShortStringConfirmed(),
                 this.ToShortStringPositive(),
                 this.ToShortStringDeaths(),
+                this.ToShortStringMortalityRate(),
                 this.ToShortStringNewPositive(),
                 this.ToShortStringTest(),
                 this.ToShortStringRecovered(),
