@@ -21,7 +21,7 @@ namespace CoronavirusFunction.Models
 
         public long? NotCritical { get; set; }
         public long? Critical { get; set; }
-        public long? Hospedalized { get; set; }
+        public long? Hospitalised { get; set; }
         public long? Quarantine { get; set; }
         public long? Active { get; set; }
         public long? TodayCases { get; set; }
@@ -29,7 +29,7 @@ namespace CoronavirusFunction.Models
         public long? Deaths { get; set; }
         public long? Cases { get; set; }
         public long? Test { get; set; }
-        public float? MortalityRate => Deaths != 0 && Cases != 0 ?  (float) Deaths / Cases : default(float?);
+        public float? MortalityRate => Deaths != 0 && Cases != 0 ?  ((float) Deaths / Cases)*100 : default(float?);
 
         public string ToLongStringConfirmed() => this.Cases != null ? $"Il totale dei casi confermati è {Cases}" : default(string);
         public string ToLongStringPositive() => this.Active != null ? $"Il numero dei positivi è {Active}" : default(string);
@@ -40,10 +40,10 @@ namespace CoronavirusFunction.Models
         public string ToShortStringDeaths() => this.Deaths != null ? $"Deceduti: {Deaths}" : default(string);
         public string ToShortStringTest() => this.Test != null ? $"Tamponi: {Test}" : default(string);
         public string ToShortStringRecovered() => this.Recovered != null ? $"Guariti: {Recovered}" : default(string);
-        public string ToShortStringHospitalized() => this.Hospedalized != null ? $"Ospedalizzati: {Hospedalized}" : default(string);
+        public string ToShortStringHospitalized() => this.Hospitalised != null ? $"Ospedalizzati: {Hospitalised}" : default(string);
         public string ToShortStringTherapy() => this.Critical != null ? $"Terapia intensiva: {Critical}" : default(string);
         public string ToShortStringNewPositive() => this.TodayCases != null ? $"Nuovi positivi: {TodayCases}" : default(string);
-        public string ToShortStringMortalityRate() => this.MortalityRate != null ? $"Tasso di mortalità: {String.Format("{0:0.##}", MortalityRate)}% " : default(string);
+        public string ToShortStringMortalityRate() => this.MortalityRate != null ? $"Tasso di mortalità: {MortalityRate}% " : default(string);
 
 
         public string ToSpeechSummary(LocationDefinition locationDefinition)

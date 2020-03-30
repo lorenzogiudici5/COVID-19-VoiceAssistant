@@ -28,7 +28,7 @@ namespace CoronavirusFunction.Helpers
                 TodayCases = countryDto.NuoviAttualmentePositivi,
                 NotCritical = countryDto.RicoveratiConSintomi,
                 Test = countryDto.Tamponi,
-                Hospedalized = countryDto.TotaleOspedalizzati,
+                Hospitalised = countryDto.TotaleOspedalizzati,
                 Date = countryDto.Date,               
             };
         }
@@ -54,7 +54,7 @@ namespace CoronavirusFunction.Helpers
                 TodayCases = adminAreaDto.NuoviAttualmentePositivi,
                 NotCritical = adminAreaDto.RicoveratiConSintomi,
                 Test = adminAreaDto.Tamponi,
-                Hospedalized = adminAreaDto.TotaleOspedalizzati,
+                Hospitalised = adminAreaDto.TotaleOspedalizzati,
                 Date = adminAreaDto.Date,
             };
         }
@@ -83,7 +83,7 @@ namespace CoronavirusFunction.Helpers
                 TodayCases = subAdminAreaDto.NuoviAttualmentePositivi,
                 NotCritical = subAdminAreaDto.RicoveratiConSintomi,
                 Test = subAdminAreaDto.Tamponi,
-                Hospedalized = subAdminAreaDto.TotaleOspedalizzati,
+                Hospitalised = subAdminAreaDto.TotaleOspedalizzati,
                 Date = subAdminAreaDto.Date,
             };
         }
