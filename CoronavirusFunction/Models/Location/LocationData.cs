@@ -30,7 +30,7 @@ namespace CoronavirusFunction.Models
         public long? Cases { get; set; }
         public long? Test { get; set; }
         public long? ActiveVariance { get; set; }
-        public float? MortalityRate => Deaths != 0 && Cases != 0 ?  ((float) Deaths / Cases)*100 : default(float?);
+        public float? MortalityRate => Deaths != 0 && Cases != 0 ?  (float) Deaths / Cases : default(float?);
 
         public string ToLongStringConfirmed() => this.Cases != null ? $"Il totale dei casi confermati è {Cases}" : default(string);
         public string ToLongStringPositive() => this.Active != null ? $"Il numero dei positivi è {Active}" : default(string);
@@ -46,8 +46,7 @@ namespace CoronavirusFunction.Models
         public string ToShortStringNewPositive() => this.TodayCases != null ? $"Nuovi positivi: {TodayCases}" : default(string);
         public string ToShortStringPositiveVariance() => this.ActiveVariance != null ? $"Variazione positivi: {ActiveVariance}" : default(string);
 
-        public string ToShortStringMortalityRate() => this.MortalityRate != null ? $"Tasso di mortalità: {MortalityRate}% " : default(string);
-
+        public string ToShortStringMortalityRate() => this.MortalityRate != null ? $"Tasso di mortalità: {String.Format("{0:#0%}", MortalityRate)}" : default(string);
 
         public string ToSpeechSummary(LocationDefinition locationDefinition)
         {
