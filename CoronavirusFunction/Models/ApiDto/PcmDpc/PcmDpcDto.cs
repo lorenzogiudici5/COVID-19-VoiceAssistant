@@ -25,11 +25,14 @@ namespace CoronavirusFunction.Models
         [JsonProperty("isolamento_domiciliare")]
         public long? IsolamentoDomiciliare { get; set; }
 
-        [JsonProperty("totale_attualmente_positivi")]
-        public long? TotaleAttualmentePositivi { get; set; }
+        [JsonProperty("variazione_totale_positivi")]
+        public long? VariazioneTotalePositivi { get; set; }
 
-        [JsonProperty("nuovi_attualmente_positivi")]
-        public long? NuoviAttualmentePositivi { get; set; }
+        [JsonProperty("totale_positivi")]
+        public long? TotalePositivi { get; set; }
+
+        [JsonProperty("nuovi_positivi")]
+        public long? NuoviPositivi { get; set; }
 
         [JsonProperty("dimessi_guariti")]
         public long? DimessiGuariti { get; set; }
