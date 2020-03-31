@@ -20,15 +20,16 @@ namespace CoronavirusFunction.Helpers
                 //FlagUri = "",
 
                 Cases = countryDto.TotaleCasi,
-                Active = countryDto.TotaleAttualmentePositivi,
+                Active = countryDto.TotalePositivi,
                 Deaths = countryDto.Deceduti,
                 Critical = countryDto.TerapiaIntensiva,
                 Recovered = countryDto.DimessiGuariti,
                 Quarantine = countryDto.IsolamentoDomiciliare,
-                TodayCases = countryDto.NuoviAttualmentePositivi,
+                TodayCases = countryDto.NuoviPositivi,
                 NotCritical = countryDto.RicoveratiConSintomi,
                 Test = countryDto.Tamponi,
-                Hospedalized = countryDto.TotaleOspedalizzati,
+                Hospitalised = countryDto.TotaleOspedalizzati,
+                ActiveVariance = countryDto.VariazioneTotalePositivi,
                 Date = countryDto.Date,               
             };
         }
@@ -46,15 +47,15 @@ namespace CoronavirusFunction.Helpers
                 CodiceRegione = adminAreaDto.CodiceRegione,
                 
                 Cases = adminAreaDto.TotaleCasi,
-                Active = adminAreaDto.TotaleAttualmentePositivi,
+                Active = adminAreaDto.TotalePositivi,
                 Deaths = adminAreaDto.Deceduti,
                 Critical = adminAreaDto.TerapiaIntensiva,
                 Recovered = adminAreaDto.DimessiGuariti,
                 Quarantine = adminAreaDto.IsolamentoDomiciliare,
-                TodayCases = adminAreaDto.NuoviAttualmentePositivi,
+                TodayCases = adminAreaDto.NuoviPositivi,
                 NotCritical = adminAreaDto.RicoveratiConSintomi,
                 Test = adminAreaDto.Tamponi,
-                Hospedalized = adminAreaDto.TotaleOspedalizzati,
+                Hospitalised = adminAreaDto.TotaleOspedalizzati,
                 Date = adminAreaDto.Date,
             };
         }
@@ -75,15 +76,15 @@ namespace CoronavirusFunction.Helpers
                 CodiceRegione = subAdminAreaDto.CodiceRegione,
 
                 Cases = subAdminAreaDto.TotaleCasi,
-                Active = subAdminAreaDto.TotaleAttualmentePositivi,
+                Active = subAdminAreaDto.TotalePositivi,
                 Deaths = subAdminAreaDto.Deceduti,
                 Critical = subAdminAreaDto.TerapiaIntensiva,
                 Recovered = subAdminAreaDto.DimessiGuariti,
                 Quarantine = subAdminAreaDto.IsolamentoDomiciliare,
-                TodayCases = subAdminAreaDto.NuoviAttualmentePositivi,
+                TodayCases = subAdminAreaDto.NuoviPositivi,
                 NotCritical = subAdminAreaDto.RicoveratiConSintomi,
                 Test = subAdminAreaDto.Tamponi,
-                Hospedalized = subAdminAreaDto.TotaleOspedalizzati,
+                Hospitalised = subAdminAreaDto.TotaleOspedalizzati,
                 Date = subAdminAreaDto.Date,
             };
         }
