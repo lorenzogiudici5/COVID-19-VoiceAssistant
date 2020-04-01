@@ -1,5 +1,6 @@
 ﻿using CoronavirusFunction.Models;
 using System;
+using System.Globalization;
 
 namespace CoronavirusFunction.Helpers
 {
@@ -10,7 +11,9 @@ namespace CoronavirusFunction.Helpers
             if (lispaData == null)
                 return null;
 
-            return new CityData(lispaData.NomeCom)
+            var cityName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lispaData.NomeCom.ToLower());
+
+            return new CityData(cityName)
             {
                 CodIstatn = lispaData.CodIstatn,
                 Fid = lispaData.Fid,
