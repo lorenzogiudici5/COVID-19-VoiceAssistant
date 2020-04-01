@@ -20,11 +20,11 @@ namespace CoronavirusFunction.Models
             $"qual'è il numero dei {chips4}";
 
         public override string DisplayText =>
-            "Al momento posso dirti il totale dei casi confermati, i positivi e i decessi dell'Italia o delle sue Regioni e Province.";
+            "Al momento posso dirti i numeri della diffusione del Coronavirus nel mondo, nelle Regioni e Province italiane e nei Comuni della Lombardia.";
 
         public HelpHandler(Conversation conversation) : base(conversation) 
         {
-            Chips = new string[] { chips1, chips2, chips3, chips4 };
+            Chips = new string[] { chips1, chips2, chips3 };
         }
     }
 }
