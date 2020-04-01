@@ -30,7 +30,11 @@ namespace CoronavirusFunction.Models
         public long? Cases { get; set; }
         public long? Test { get; set; }
         public long? ActiveVariance { get; set; }
-        public float? MortalityRate => Deaths != 0 && Cases != 0 ?  (float) Deaths / Cases : default(float?);
+        public float? MortalityRate => 
+            Deaths.HasValue && Deaths != 0 &&
+            Cases.HasValue && Cases != 0 ? 
+            (float) Deaths / Cases : 
+            default(float?);
 
         public string ToLongStringConfirmed() => this.Cases != null ? $"Il totale dei casi confermati è {Cases}" : default(string);
         public string ToLongStringPositive() => this.Active != null ? $"Il numero dei positivi è {Active}" : default(string);

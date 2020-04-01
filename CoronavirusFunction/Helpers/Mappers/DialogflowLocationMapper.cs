@@ -24,7 +24,7 @@ namespace CoronavirusFunction.Helpers
             {
                 LocationDefinition.Country => locationDto.Country,
                 LocationDefinition.AdminArea => locationDto.AdminArea,
-                LocationDefinition.SubAdminArea => locationDto.SubadminArea,
+                LocationDefinition.SubAdminArea => subAdminArea,
                 LocationDefinition.City => locationDto.City,
                 _ => string.Empty,
             };
