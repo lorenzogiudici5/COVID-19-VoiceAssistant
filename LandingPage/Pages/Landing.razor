@@ -1,0 +1,37 @@
+﻿@page "/landing"
+@inject HttpClient Http
+
+<h1>I numeri del Virus!</h1>
+
+<input @bind="@Email">Email</input>
+<button type="submit" class="btn btn-primary" @onclick="SendEmail">Register</button>
+
+@*<EditForm Model="@Request" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputText id="name" @bind-Value="Request.Email" />
+
+        <button type="submit">Submit</button>
+    </EditForm>*@
+
+@code{
+    public string Email { get; set; }
+
+    public void SendEmail()
+    {
+        // TODO: http post to logic app
+        var request = new Request();
+        request.Email = this.Email;
+        var content = HttpClientJsonExtensions.PostJsonAsync<Request>(Http, "https://prod-63.westeurope.logic.azure.com:443/workflows/686ed19e46174c39a47b814d0adaea26/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=brpBG-hTAApifvlePx5HS8NlvkPP5A4d6LPBuCjDOGw", request);
+        //var result = await Http.PostAsync("", )
+    }
+
+    //public Request Request { get; set; } = new Request();
+
+    public class Request
+    {
+        public string Email { get; set; }
+        //     public string DeviceType { get; set; }
+    }
+}
