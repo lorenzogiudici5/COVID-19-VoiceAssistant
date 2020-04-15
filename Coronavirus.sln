@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoronavirusFunction", "CoronavirusFunction\CoronavirusFunction.csproj", "{C20C3775-8E9D-4B52-A1EE-200AC1D1264A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandingPage", "LandingPage\LandingPage.csproj", "{2D9629B3-C217-47E6-9382-88D859019B86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LandingPage", "LandingPage\LandingPage.csproj", "{2D9629B3-C217-47E6-9382-88D859019B86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,41 @@
+﻿@inject HttpClient Http
+
+<EditForm Model="@Request" OnValidSubmit="SendEmail">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group"> 
+        <InputText class="form-control" placeholder="Inserisci la tua email" @bind-Value="Request.Email" />
+    </div>
+    <div class="form-check">
+        <InputCheckbox class="form-check-input" @bind-Value="Request.Alexa"></InputCheckbox>
+        <label class="form-check-label">Alexa</label>
+    </div>
+    <div class="form-check">
+        <InputCheckbox class="form-check-input" @bind-Value="Request.Google"></InputCheckbox>
+        <label class="form-check-label">Google Home</label>
+    </div>
+    <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+    
+    <div class="@Status">
+        @Result
+    </div>
+</EditForm>
+
+
+@code{
+    public string Result { get; set; } = string.Empty;
+    public string Status { get; set; }
+    public Request Request { get; set; } = new Request();
+
+    public async void SendEmail()
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize<Request>(Request);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await Http.PostAsync("https://prod-63.westeurope.logic.azure.com:443/workflows/686ed19e46174c39a47b814d0adaea26/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=brpBG-hTAApifvlePx5HS8NlvkPP5A4d6LPBuCjDOGw", content);
+        Result = response.StatusCode.ToString();
+        Status = response.StatusCode == System.Net.HttpStatusCode.Accepted ? "success" : "error";
+
+        StateHasChanged();
+    }
+}
