@@ -10,7 +10,7 @@
     <PackageReference Include="Google.Protobuf" Version="3.11.4" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.14" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.5" />
-    <PackageReference Include="Refit" Version="5.1.27" />
+    <PackageReference Include="Refit" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\countries.json">
